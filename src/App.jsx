@@ -1,249 +1,218 @@
 import { useState, useEffect } from 'react';
 
-// --- FOOD BRIDGE LOGO - Basket on Bridge ---
-const Logo = () => (
-  <div className="flex items-center gap-2">
-    <svg width="42" height="32" viewBox="0 0 200 120" fill="none">
-      <path d="M10 100 L60 10 L100 5 L140 10 L190 100" stroke="#16a34a" strokeWidth="8" fill="none" strokeLinejoin="round"/>
-      <path d="M10 100 Q100 85 190 100" stroke="#16a34a" strokeWidth="8" fill="none"/>
-      <path d="M75 55 Q100 35 125 55 L120 75 L80 75 Z" fill="#d4a017" stroke="#d4a017"/>
-      <circle cx="95" cy="45" r="3" fill="#f5d76e"/><circle cx="105" cy="42" r="3" fill="#f5d76e"/><circle cx="100" cy="50" r="2.5" fill="#f5d76e"/>
+const styles = {
+  nav: { display:'flex', justifyContent:'space-between', alignItems:'center', padding:'12px 24px', background:'white', borderBottom:'1px solid #e5e7eb', position:'sticky', top:0, zIndex:10 },
+  logo: { display:'flex', alignItems:'center', gap:'10px', fontWeight:800, fontSize:'20px', color:'#166534' },
+  btnOutline: { padding:'8px 18px', border:'1.5px solid #16a34a', borderRadius:'20px', background:'white', color:'#16a34a', cursor:'pointer', fontWeight:600, marginLeft:'8px' },
+  btnGreen: { padding:'12px 24px', border:'none', borderRadius:'10px', background:'#16a34a', color:'white', cursor:'pointer', fontWeight:700, width:'100%', fontSize:'16px' },
+  card: { background:'white', borderRadius:'16px', padding:'24px', boxShadow:'0 4px 20px rgba(0,0,0,0.08)', border:'1px solid #f0f0f0' },
+  input: { width:'100%', padding:'12px', border:'1.5px solid #e5e7eb', borderRadius:'10px', fontSize:'14px', outline:'none', boxSizing:'border-box' },
+  label: { fontSize:'13px', fontWeight:600, color:'#374151', marginBottom:'6px', display:'block' },
+  tabActive: { padding:'12px 20px', background:'#16a34a', color:'white', border:'none', borderRadius:'10px', cursor:'pointer', fontWeight:600 },
+  tab: { padding:'12px 20px', background:'#f3f4f6', color:'#6b7280', border:'none', borderRadius:'10px', cursor:'pointer', fontWeight:600 },
+};
+
+function LogoSVG({ size=36 }){
+  return (
+    <svg width={size} height={size} viewBox="0 0 100 70">
+      <path d="M5 60 Q50 35 95 60" stroke="#16a34a" strokeWidth="6" fill="none" strokeLinecap="round"/>
+      <path d="M15 60 L35 18 Q50 8 65 18 L85 60" stroke="#16a34a" strokeWidth="5" fill="none"/>
+      <ellipse cx="50" cy="42" rx="18" ry="10" fill="#fbbf24" stroke="#d97706" strokeWidth="1.5"/>
+      <path d="M32 42 Q50 32 68 42 Q50 52 32 42" fill="#f59e0b" opacity="0.8"/>
     </svg>
-    <span className="font-black text-xl text-green-800">FoodBridge</span>
-  </div>
-);
+  );
+}
 
-export default function App() {
-  const [page, setPage] = useState('home');
-  const [user, setUser] = useState(null);
-  const [tab, setTab] = useState('overview');
-  const [foods, setFoods] = useState([]);
-
-  // Auth forms
-  const [reg, setReg] = useState({fullName:'', phone:'', email:'', password:'', type:'family_transfer', location:''});
-  const [login, setLogin] = useState({email:'', password:''});
-
-  // Add food form
-  const [foodForm, setFoodForm] = useState({
-    foodName:'', nature:'Rice / Grains', quantity:'', unit:'Bags (50kg)', quality:'Fresh',
-    storageDuration:'1 Week', pickup:'', delivery:'', note:''
-  });
+export default function App(){
+  const [view,setView] = useState('home');
+  const [currentUser,setCurrentUser] = useState(null);
+  const [activeTab,setActiveTab] = useState('overview');
+  const [foods,setFoods] = useState([]);
+  const [form,setForm] = useState({ fullName:'', phone:'', email:'', password:'', userType:'family_transfer', location:'' });
+  const [foodForm,setFoodForm] = useState({ name:'', nature:'Grains - Rice, Maize, Beans', quantity:'', unit:'Bags', quality:'Fresh', pickup:'', delivery:'', duration:'1 Week', desc:'' });
 
   useEffect(()=>{
-    const u = localStorage.getItem('fb_user');
-    const f = localStorage.getItem('fb_foods');
-    if(u) { setUser(JSON.parse(u)); setPage('dashboard'); }
-    if(f) setFoods(JSON.parse(f));
+    const saved = localStorage.getItem('fb_user');
+    if(saved) setCurrentUser(JSON.parse(saved));
+    const savedFoods = localStorage.getItem('fb_foods');
+    if(savedFoods) setFoods(JSON.parse(savedFoods));
   },[]);
 
   const handleRegister = (e)=>{
     e.preventDefault();
-    if(!reg.fullName ||!reg.phone ||!reg.email ||!reg.password) return alert('Fill all fields');
-    const allUsers = JSON.parse(localStorage.getItem('fb_all_users')||'[]');
-    if(allUsers.find(u=>u.email===reg.email)) return alert('Email already exists, login');
-    const newUser = {...reg, id:Date.now()};
-    allUsers.push(newUser);
-    localStorage.setItem('fb_all_users', JSON.stringify(allUsers));
-    localStorage.setItem('fb_user', JSON.stringify(newUser));
-    setUser(newUser); setPage('dashboard');
+    if(!form.fullName ||!form.phone ||!form.email ||!form.password){ alert('Fill all fields'); return; }
+    const users = JSON.parse(localStorage.getItem('fb_users')||'[]');
+    if(users.find(u=>u.email===form.email)){ alert('Email already exists'); return; }
+    users.push({...form, id:Date.now()});
+    localStorage.setItem('fb_users', JSON.stringify(users));
+    localStorage.setItem('fb_user', JSON.stringify(form));
+    setCurrentUser(form);
+    setView('dashboard');
   };
 
-  const handleLogin = (e)=>{
-    e.preventDefault();
-    const allUsers = JSON.parse(localStorage.getItem('fb_all_users')||'[]');
-    const found = allUsers.find(u=>u.email===login.email && u.password===login.password);
-    if(!found) return alert('Wrong email/password');
-    localStorage.setItem('fb_user', JSON.stringify(found));
-    setUser(found); setPage('dashboard');
-  };
-
-  const logout = ()=>{
-    localStorage.removeItem('fb_user');
-    setUser(null); setPage('home'); setTab('overview');
+  const handleLogin = ()=>{
+    const email = prompt('Enter email:');
+    const pass = prompt('Enter password:');
+    const users = JSON.parse(localStorage.getItem('fb_users')||'[]');
+    const found = users.find(u=>u.email===email && u.password===pass);
+    if(found){ localStorage.setItem('fb_user', JSON.stringify(found)); setCurrentUser(found); setView('dashboard'); }
+    else alert('Wrong credentials - Register first');
   };
 
   const addFood = (e)=>{
     e.preventDefault();
-    if(!foodForm.foodName ||!foodForm.quantity) return alert('Add food name & quantity');
-    const newFood = {id:Date.now(), userEmail:user.email, status:'Stored', date:new Date().toLocaleDateString(),...foodForm};
-    const updated = [newFood,...foods];
+    const newFood = {...foodForm, id:Date.now(), owner:currentUser.email, status: currentUser.userType==='storage_client'?'Stored':'In Transit', date:new Date().toLocaleDateString() };
+    const updated = [...foods, newFood];
     setFoods(updated);
     localStorage.setItem('fb_foods', JSON.stringify(updated));
-    setFoodForm({foodName:'', nature:'Rice / Grains', quantity:'', unit:'Bags (50kg)', quality:'Fresh', storageDuration:'1 Week', pickup:'', delivery:'', note:''});
-    setTab('myfoods');
-    alert('Food Added Successfully!');
+    setFoodForm({ name:'', nature:'Grains - Rice, Maize, Beans', quantity:'', unit:'Bags', quality:'Fresh', pickup:'', delivery:'', duration:'1 Week', desc:'' });
+    setActiveTab('myfoods');
+    alert('Food added successfully!');
   };
 
-  const withdrawFood = (id)=>{
-    if(confirm('Request withdrawal/delivery for this item?')){
-      const updated = foods.map(f=> f.id===id? {...f, status:'Withdrawal Requested'} : f);
+  const withdraw = (id)=>{
+    if(confirm('Request withdrawal/delivery?')) {
+      const updated = foods.filter(f=>f.id!==id);
       setFoods(updated);
       localStorage.setItem('fb_foods', JSON.stringify(updated));
+      alert('Withdrawal requested - Our agent will call you: '+currentUser.phone);
     }
   };
 
-  const myFoods = foods.filter(f=>f.userEmail===user?.email);
+  const myFoods = foods.filter(f=>f.owner===currentUser?.email);
 
-  if(page==='dashboard' && user){
-    const typeLabel = {
-      family_transfer: 'Family & Personal Transfer',
-      bulk_trader: 'Bulk Trader & Wholesaler',
-      storage_client: 'Storage Client'
-    }[user.type];
-
+  if(view==='home'){
     return (
-      <div className="min-h-screen bg-gray-50">
-        <nav className="bg-white shadow-sm sticky top-0 z-10 px-4 py-3 flex justify-between items-center">
-          <Logo/>
-          <div className="flex gap-2 items-center">
-            <span className="text-sm hidden md:block">Hi, {user.fullName.split(' ')[0]}</span>
-            <button onClick={logout} className="border border-green-600 text-green-700 px-4 py-1 rounded-full text-sm">Logout</button>
-          </div>
+      <div style={{fontFamily:'Inter, sans-serif', background:'#f9fafb', minHeight:'100vh'}}>
+        <nav style={styles.nav}>
+          <div style={styles.logo}><LogoSVG/> FoodBridge</div>
+          <div><button style={styles.btnOutline} onClick={handleLogin}>Login</button><button style={{...styles.btnOutline, background:'#16a34a', color:'white'}} onClick={()=>setView('register')}>Get Started</button></div>
         </nav>
-
-        <div className="max-w-6xl mx-auto p-4 grid md:grid-cols-4 gap-4 mt-4">
-          {/* Sidebar Tabs */}
-          <div className="bg-white rounded-xl p-3 h-fit shadow-sm">
-            <p className="font-bold mb-3 text-sm">{typeLabel}</p>
-            <div className="space-y-1">
-              {[
-                {id:'overview', label:'📊 Overview'},
-                {id:'add', label:'➕ Add Food'},
-                {id:'myfoods', label:'📦 My Foods'},
-                {id:'withdraw', label:'🚚 Withdraw / Transfer'},
-                {id:'storage', label:'🏚️ My Storage'},
-              ].map(t=>(
-                <button key={t.id} onClick={()=>setTab(t.id)} className={`w-full text-left px-3 py-2.5 rounded-lg text-sm ${tab===t.id?'bg-green-600 text-white':'hover:bg-gray-100'}`}>{t.label}</button>
-              ))}
-            </div>
-            <div className="mt-4 p-3 bg-green-50 rounded-lg text-xs">
-              <p><b>Name:</b> {user.fullName}</p><p><b>Phone:</b> {user.phone}</p><p><b>Type:</b> {typeLabel}</p>
+        <div style={{maxWidth:'1000px', margin:'0 auto', padding:'40px 20px'}}>
+          <div style={{textAlign:'center', padding:'40px 0'}}>
+            <h1 style={{fontSize:'48px', fontWeight:800, lineHeight:1.1}}>Bridge The Gap Between <span style={{color:'#16a34a'}}>Farm & Family</span></h1>
+            <p style={{color:'#6b7280', fontSize:'18px', marginTop:'16px'}}>Send food to your son in school, store your harvest, or trade in bulk - FoodBridge handles it.</p>
+            <div style={{marginTop:'24px', display:'flex', gap:'12px', justifyContent:'center'}}>
+              <button style={{...styles.btnGreen, width:'auto', padding:'14px 28px'}} onClick={()=>setView('register')}>Create Free Account</button>
+              <button style={{...styles.btnOutline, padding:'14px 28px'}} onClick={()=>document.getElementById('how').scrollIntoView()}>How it works</button>
             </div>
           </div>
 
-          {/* Main Content */}
-          <div className="md:col-span-3">
-            {tab==='overview' && (
-              <div className="space-y-4">
-                <h1 className="text-2xl font-bold">Welcome {user.fullName} 👋</h1>
-                <div className="grid grid-cols-3 gap-3">
-                  <div className="bg-white p-4 rounded-xl shadow-sm"><p className="text-2xl font-bold">{myFoods.length}</p><p className="text-xs text-gray-500">Items Stored</p></div>
-                  <div className="bg-white p-4 rounded-xl shadow-sm"><p className="text-2xl font-bold">{myFoods.filter(f=>f.status==='Stored').length}</p><p className="text-xs text-gray-500">Active</p></div>
-                  <div className="bg-white p-4 rounded-xl shadow-sm"><p className="text-2xl font-bold text-green-600">Safe</p><p className="text-xs text-gray-500">Storage Status</p></div>
-                </div>
-                {user.type==='family_transfer' && <div className="bg-blue-50 p-4 rounded-xl text-sm">💡 <b>For You:</b> Send food from mother to student, family sharing, traveler parcels. Use <b>Add Food → Transfer</b> to send to another city.</div>}
-                {user.type==='bulk_trader' && <div className="bg-yellow-50 p-4 rounded-xl text-sm">💡 <b>For Traders:</b> Supply large quantities to FoodBridge or request transport for your goods to markets. Add your bulk stock.</div>}
-                {user.type==='storage_client' && <div className="bg-green-50 p-4 rounded-xl text-sm">💡 <b>Storage:</b> Your food is stored securely. Set duration (weeks/months) when adding food. Withdraw anytime.</div>}
-              </div>
-            )}
-
-            {tab==='add' && (
-              <div className="bg-white rounded-xl shadow-sm p-5">
-                <h2 className="font-bold text-lg mb-4">Add / Deposit Food</h2>
-                <form onSubmit={addFood} className="grid md:grid-cols-2 gap-4">
-                  <div><label className="text-xs font-bold">Food Name *</label><input value={foodForm.foodName} onChange={e=>setFoodForm({...foodForm, foodName:e.target.value})} placeholder="e.g. Bags of Rice, Yam Tubers" className="w-full border p-2.5 rounded-lg text-sm"/></div>
-                  <div><label className="text-xs font-bold">Nature of Food *</label><select value={foodForm.nature} onChange={e=>setFoodForm({...foodForm, nature:e.target.value})} className="w-full border p-2.5 rounded-lg text-sm"><option>Rice / Grains</option><option>Tubers (Yam, Cassava)</option><option>Beans / Legumes</option><option>Vegetables</option><option>Palm Oil / Liquids</option><option>Processed Food</option><option>Other</option></select></div>
-                  <div><label className="text-xs font-bold">Quantity *</label><input type="number" value={foodForm.quantity} onChange={e=>setFoodForm({...foodForm, quantity:e.target.value})} placeholder="e.g. 10" className="w-full border p-2.5 rounded-lg text-sm"/></div>
-                  <div><label className="text-xs font-bold">Unit</label><select value={foodForm.unit} onChange={e=>setFoodForm({...foodForm, unit:e.target.value})} className="w-full border p-2.5 rounded-lg text-sm"><option>Bags (50kg)</option><option>Bags (25kg)</option><option>Kilograms (kg)</option><option>Tubers / Pieces</option><option>Crates</option><option>Liters</option></select></div>
-                  <div><label className="text-xs font-bold">Quality</label><select value={foodForm.quality} onChange={e=>setFoodForm({...foodForm, quality:e.target.value})} className="w-full border p-2.5 rounded-lg text-sm"><option>Fresh</option><option>Dried</option><option>Smoked</option><option>Frozen</option><option>Processed</option></select></div>
-                  <div><label className="text-xs font-bold">Storage Duration</label><select value={foodForm.storageDuration} onChange={e=>setFoodForm({...foodForm, storageDuration:e.target.value})} className="w-full border p-2.5 rounded-lg text-sm"><option>1 Week</option><option>2 Weeks</option><option>1 Month</option><option>3 Months</option><option>6 Months</option><option>Until I Withdraw</option></select></div>
-                  <div><label className="text-xs font-bold">Pickup Location</label><input value={foodForm.pickup} onChange={e=>setFoodForm({...foodForm, pickup:e.target.value})} placeholder="Your village / address" className="w-full border p-2.5 rounded-lg text-sm"/></div>
-                  <div><label className="text-xs font-bold">Delivery / Storage Destination</label><input value={foodForm.delivery} onChange={e=>setFoodForm({...foodForm, delivery:e.target.value})} placeholder="Abuja, School, Market..." className="w-full border p-2.5 rounded-lg text-sm"/></div>
-                  <div className="md:col-span-2"><label className="text-xs font-bold">Note</label><textarea value={foodForm.note} onChange={e=>setFoodForm({...foodForm, note:e.target.value})} placeholder="e.g. Send 2 bags to my son at UniAbuja, keep 8 bags in storage" className="w-full border p-2.5 rounded-lg text-sm" rows="2"></textarea></div>
-                  <button className="md:col-span-2 bg-green-600 text-white py-3 rounded-lg font-bold">Deposit Food Now</button>
-                </form>
-              </div>
-            )}
-
-            {tab==='myfoods' && (
-              <div className="bg-white rounded-xl shadow-sm p-5">
-                <h2 className="font-bold mb-4">My Deposited Foods ({myFoods.length})</h2>
-                {myFoods.length===0? <p className="text-gray-400 text-sm">No food added yet. Go to Add Food.</p> :
-                  <div className="space-y-3">
-                    {myFoods.map(f=>(
-                      <div key={f.id} className="border rounded-lg p-3 flex justify-between items-center">
-                        <div><p className="font-bold text-sm">{f.foodName} - {f.quantity} {f.unit}</p><p className="text-xs text-gray-500">{f.nature} | {f.quality} | {f.storageDuration} | {f.status}</p><p className="text-xs">{f.pickup} → {f.delivery}</p></div>
-                        <button onClick={()=>withdrawFood(f.id)} className="text-xs bg-green-100 text-green-700 px-3 py-1.5 rounded-full">Withdraw</button>
-                      </div>
-                    ))}
-                  </div>
-                }
-              </div>
-            )}
-
-            {tab==='withdraw' && (
-              <div className="bg-white rounded-xl shadow-sm p-5">
-                <h2 className="font-bold mb-4">Withdraw / Transfer / Transport Request</h2>
-                <p className="text-sm text-gray-600 mb-3">Select an item from My Foods and click Withdraw, or make a new transfer request:</p>
-                <div className="space-y-2">
-                  {myFoods.filter(f=>f.status==='Withdrawal Requested').map(f=>(
-                    <div key={f.id} className="bg-yellow-50 p-3 rounded-lg text-sm"><b>{f.foodName}</b> - Withdrawal requested, our agent will call {user.phone} in 24hrs.</div>
-                  ))}
-                  {myFoods.filter(f=>f.status==='Withdrawal Requested').length===0 && <p className="text-xs text-gray-400">No pending withdrawals</p>}
-                </div>
-              </div>
-            )}
-
-            {tab==='storage' && (
-              <div className="bg-white rounded-xl shadow-sm p-5">
-                <h2 className="font-bold mb-2">🏚️ Storage Space</h2>
-                <p className="text-sm text-gray-600">Your current storage allocation at FoodBridge Abuja warehouse.</p>
-                <div className="mt-4 p-4 bg-gray-50 rounded-lg"><p className="text-sm">Total Items: {myFoods.length}</p><p className="text-sm">Estimated Space: {myFoods.reduce((a,c)=>a+ (parseInt(c.quantity)||0),0)} units</p><p className="text-xs mt-2 text-green-700">Storage fee: ₦500 per bag per month. Family transfers are free for first 2 weeks.</p></div>
-              </div>
-            )}
+          <div id="how" style={{display:'grid', gridTemplateColumns:'repeat(auto-fit,minmax(280px,1fr))', gap:'20px', marginTop:'20px'}}>
+            <div style={styles.card}><h3>👨‍👩‍👧 Family & Personal Transfer</h3><p style={{color:'#6b7280', fontSize:'14px'}}>For students, mother to son in school, traveler who wants goods to reach other end. Send small food packages across states.</p></div>
+            <div style={styles.card}><h3>📦 Bulk Trader & Wholesaler</h3><p style={{color:'#6b7280', fontSize:'14px'}}>Businessman who buys large quantity to sell, or brings harvest to sell to FoodBridge, or needs transport help.</p></div>
+            <div style={styles.card}><h3>🏬 Storage Client</h3><p style={{color:'#6b7280', fontSize:'14px'}}>Store your food - large or small quantity - short or long term. Safe, secure, pest-free warehouses.</p></div>
           </div>
         </div>
       </div>
     );
   }
 
+  if(view==='register'){
+    return (
+      <div style={{fontFamily:'Inter,sans-serif', background:'#f9fafb', minHeight:'100vh', display:'flex', alignItems:'center', justifyContent:'center', padding:'20px'}}>
+        <div style={{...styles.card, maxWidth:'480px', width:'100%'}}>
+          <div style={{textAlign:'center', marginBottom:'20px'}}><LogoSVG size={48}/><h2 style={{margin:'10px 0 4px'}}>Create Account</h2><p style={{color:'#6b7280', fontSize:'14px'}}>Join FoodBridge today</p></div>
+          <form onSubmit={handleRegister} style={{display:'flex', flexDirection:'column', gap:'14px'}}>
+            <div><label style={styles.label}>Full Name</label><input style={styles.input} placeholder="Francis Yakubu" value={form.fullName} onChange={e=>setForm({...form, fullName:e.target.value})}/></div>
+            <div style={{display:'grid', gridTemplateColumns:'1fr 1fr', gap:'12px'}}>
+              <div><label style={styles.label}>Phone</label><input style={styles.input} placeholder="08163831822" value={form.phone} onChange={e=>setForm({...form, phone:e.target.value})}/></div>
+              <div><label style={styles.label}>Location</label><input style={styles.input} placeholder="Abuja, Keffi..." value={form.location} onChange={e=>setForm({...form, location:e.target.value})}/></div>
+            </div>
+            <div><label style={styles.label}>Email</label><input style={styles.input} type="email" placeholder="you@gmail.com" value={form.email} onChange={e=>setForm({...form, email:e.target.value})}/></div>
+            <div><label style={styles.label}>Password</label><input style={styles.input} type="password" value={form.password} onChange={e=>setForm({...form, password:e.target.value})}/></div>
+            <div><label style={styles.label}>I am a...</label>
+              <select style={styles.input} value={form.userType} onChange={e=>setForm({...form, userType:e.target.value})}>
+                <option value="family_transfer">Family & Personal Transfer - Students, family sharing</option>
+                <option value="bulk_trader">Bulk Trader & Wholesaler - Buy/sell large quantity</option>
+                <option value="storage_client">Storage Client - Store food for period</option>
+              </select>
+            </div>
+            <button style={styles.btnGreen} type="submit">Register</button>
+            <p style={{textAlign:'center', fontSize:'14px'}}>Already have account? <span style={{color:'#16a34a', cursor:'pointer', fontWeight:600}} onClick={handleLogin}>Login</span></p>
+            <p style={{textAlign:'center'}}><span style={{cursor:'pointer', color:'#6b7280'}} onClick={()=>setView('home')}>← Back Home</span></p>
+          </form>
+        </div>
+      </div>
+    );
+  }
+
+  // DASHBOARD
   return (
-    <div className="min-h-screen bg-white">
-      <nav className="flex justify-between items-center px-6 py-4 shadow-sm sticky top-0 bg-white z-10"><Logo/><div className="flex gap-3"><button onClick={()=>setPage('login')} className="text-sm">Login</button><button onClick={()=>setPage('register')} className="bg-green-600 text-white px-5 py-2 rounded-full text-sm">Get Started</button></div></nav>
+    <div style={{fontFamily:'Inter,sans-serif', background:'#f3f4f6', minHeight:'100vh'}}>
+      <nav style={styles.nav}>
+        <div style={styles.logo}><LogoSVG/> FoodBridge</div>
+        <div style={{display:'flex', alignItems:'center', gap:'12px'}}><span>Hi, {currentUser.fullName.split(' ')[0]}</span><button style={styles.btnOutline} onClick={()=>{localStorage.removeItem('fb_user'); setCurrentUser(null); setView('home');}}>Logout</button></div>
+      </nav>
 
-      {page==='home' && (
-        <div className="max-w-5xl mx-auto px-6 py-12 text-center">
-          <h1 className="text-4xl md:text-5xl font-black leading-tight">Connecting <span className="text-green-600">Farms</span> to Families<br/>in Abuja</h1>
-          <p className="mt-4 text-gray-600 max-w-2xl mx-auto">Family sending food to your son in school? Trader with 100 bags? Need safe storage? FoodBridge is your bridge.</p>
-          <div className="grid md:grid-cols-3 gap-4 mt-10 text-left">
-            <div className="border rounded-xl p-5"><h3 className="font-bold">👨‍👩‍👦 Family & Personal</h3><p className="text-sm text-gray-600 mt-2">Mother to son in school, family food sharing, traveler sending goods home. We transport small parcels city-to-city.</p></div>
-            <div className="border rounded-xl p-5"><h3 className="font-bold">📦 Bulk Trader</h3><p className="text-sm text-gray-600 mt-2">Buy in large quantity, sell to FoodBridge or use us to transport your goods to markets and buyers.</p></div>
-            <div className="border rounded-xl p-5"><h3 className="font-bold">🏚️ Storage Client</h3><p className="text-sm text-gray-600 mt-2">Store small or large quantity for short or long term in our secure Abuja warehouse. Withdraw anytime.</p></div>
+      <div style={{maxWidth:'1100px', margin:'0 auto', padding:'20px'}}>
+        <h2 style={{fontSize:'22px'}}>Dashboard - {currentUser.userType==='family_transfer'?'Family Transfer':currentUser.userType==='bulk_trader'?'Trader':'Storage'} Account 👋</h2>
+
+        <div style={{display:'flex', gap:'10px', margin:'20px 0', flexWrap:'wrap'}}>
+          <button style={activeTab==='overview'?styles.tabActive:styles.tab} onClick={()=>setActiveTab('overview')}>Overview</button>
+          <button style={activeTab==='add'?styles.tabActive:styles.tab} onClick={()=>setActiveTab('add')}>+ Add Food</button>
+          <button style={activeTab==='myfoods'?styles.tabActive:styles.tab} onClick={()=>setActiveTab('myfoods')}>My Foods ({myFoods.length})</button>
+          <button style={activeTab==='withdraw'?styles.tabActive:styles.tab} onClick={()=>setActiveTab('withdraw')}>Withdraw / Transfer</button>
+        </div>
+
+        {activeTab==='overview' && (
+          <div style={{display:'grid', gridTemplateColumns:'repeat(auto-fit,minmax(300px,1fr))', gap:'16px'}}>
+            <div style={styles.card}><p style={styles.label}>Profile</p><p><b>Name:</b> {currentUser.fullName}</p><p><b>Phone:</b> {currentUser.phone}</p><p><b>Type:</b> {currentUser.userType}</p><p><b>Location:</b> {currentUser.location}</p></div>
+            <div style={styles.card}><p style={styles.label}>Your Stats</p><h1 style={{fontSize:'36px', margin:'10px 0'}}>{myFoods.length}</h1><p>Active food items</p><button style={{...styles.btnGreen, marginTop:'12px'}} onClick={()=>setActiveTab('add')}>Add New Food</button></div>
+            <div style={{...styles.card, background:'#16a34a', color:'white'}}><h3>What you can do:</h3><ul style={{fontSize:'14px', lineHeight:'1.8'}}>{currentUser.userType==='family_transfer'?<><li>Send food to family in school</li><li>Track delivery</li><li>Withdraw when it arrives</li></>:currentUser.userType==='bulk_trader'?<><li>Upload bulk quantity</li><li>Sell to FoodBridge</li><li>Request transport</li></>:<><li>Store short/long term</li><li>Check quality anytime</li><li>Withdraw anytime</li></>}</ul></div>
           </div>
-          <button onClick={()=>setPage('register')} className="mt-8 bg-green-600 text-white px-8 py-3 rounded-full font-bold">Create Free Account</button>
-        </div>
-      )}
+        )}
 
-      {page==='register' && (
-        <div className="max-w-md mx-auto mt-10 p-6 bg-white border rounded-xl">
-          <h2 className="font-bold text-xl mb-4">Create Account</h2>
-          <form onSubmit={handleRegister} className="space-y-3">
-            <input value={reg.fullName} onChange={e=>setReg({...reg, fullName:e.target.value})} placeholder="Full Name" className="w-full border p-2.5 rounded-lg text-sm"/>
-            <input value={reg.phone} onChange={e=>setReg({...reg, phone:e.target.value})} placeholder="Phone (e.g. 08163831822)" className="w-full border p-2.5 rounded-lg text-sm"/>
-            <input value={reg.email} onChange={e=>setReg({...reg, email:e.target.value})} placeholder="Email" className="w-full border p-2.5 rounded-lg text-sm"/>
-            <input type="password" value={reg.password} onChange={e=>setReg({...reg, password:e.target.value})} placeholder="Password" className="w-full border p-2.5 rounded-lg text-sm"/>
-            <select value={reg.type} onChange={e=>setReg({...reg, type:e.target.value})} className="w-full border p-2.5 rounded-lg text-sm">
-              <option value="family_transfer">Family & Personal Transfer - For students, family sharing, travelers</option>
-              <option value="bulk_trader">Bulk Trader & Wholesaler - Businessman buying/selling large quantity</option>
-              <option value="storage_client">Storage Client - Store food for short/long term</option>
-            </select>
-            <input value={reg.location} onChange={e=>setReg({...reg, location:e.target.value})} placeholder="Your Location (e.g. Abuja, Keffi)" className="w-full border p-2.5 rounded-lg text-sm"/>
-            <button className="w-full bg-green-600 text-white py-3 rounded-lg font-bold">Register</button>
-            <p className="text-xs text-center">Already have account? <span onClick={()=>setPage('login')} className="text-green-600 cursor-pointer">Login</span></p>
-          </form>
-        </div>
-      )}
+        {activeTab==='add' && (
+          <div style={{...styles.card, maxWidth:'700px'}}>
+            <h3>Add New Food - Fill Quantity, Quality, Nature</h3>
+            <form onSubmit={addFood} style={{display:'flex', flexDirection:'column', gap:'14px', marginTop:'16px'}}>
+              <div style={{display:'grid', gridTemplateColumns:'1fr 1fr', gap:'12px'}}>
+                <div><label style={styles.label}>Food Name *</label><input style={styles.input} required placeholder="e.g. Rice, Yam, Garri" value={foodForm.name} onChange={e=>setFoodForm({...foodForm, name:e.target.value})}/></div>
+                <div><label style={styles.label}>Nature of Food *</label><select style={styles.input} value={foodForm.nature} onChange={e=>setFoodForm({...foodForm, nature:e.target.value})}><option>Grains - Rice, Maize, Beans</option><option>Tubers - Yam, Cassava, Potato</option><option>Flour - Garri, Flour, Semovita</option><option>Vegetables - Fresh</option><option>Oils & Others</option><option>Packaged Food</option></select></div>
+              </div>
+              <div style={{display:'grid', gridTemplateColumns:'1fr 1fr 1fr', gap:'12px'}}>
+                <div><label style={styles.label}>Quantity *</label><input style={styles.input} required type="number" placeholder="e.g. 50" value={foodForm.quantity} onChange={e=>setFoodForm({...foodForm, quantity:e.target.value})}/></div>
+                <div><label style={styles.label}>Unit</label><select style={styles.input} value={foodForm.unit} onChange={e=>setFoodForm({...foodForm, unit:e.target.value})}><option>Bags</option><option>Kg</option><option>Baskets</option><option>Cartons</option><option>Trucks</option></select></div>
+                <div><label style={styles.label}>Quality</label><select style={styles.input} value={foodForm.quality} onChange={e=>setFoodForm({...foodForm, quality:e.target.value})}><option>Fresh</option><option>Dried</option><option>Smoked</option><option>Processed</option><option>Premium Grade A</option></select></div>
+              </div>
+              <div style={{display:'grid', gridTemplateColumns:'1fr 1fr', gap:'12px'}}>
+                <div><label style={styles.label}>Pickup Location</label><input style={styles.input} placeholder="e.g. Keffi Market" value={foodForm.pickup} onChange={e=>setFoodForm({...foodForm, pickup:e.target.value})}/></div>
+                <div><label style={styles.label}>{currentUser.userType==='family_transfer'?'Delivery To (Family Location)':'Delivery / Storage Location'}</label><input style={styles.input} placeholder="e.g. Abuja - UniAbuja Hostel" value={foodForm.delivery} onChange={e=>setFoodForm({...foodForm, delivery:e.target.value})}/></div>
+              </div>
+              <div><label style={styles.label}>Storage / Transfer Duration</label><select style={styles.input} value={foodForm.duration} onChange={e=>setFoodForm({...foodForm, duration:e.target.value})}><option>1 Week</option><option>2 Weeks</option><option>1 Month</option><option>3 Months</option><option>6 Months</option><option>Immediate Transfer</option></select></div>
+              <div><label style={styles.label}>Description / Special Instruction</label><textarea style={{...styles.input, height:'80px'}} placeholder="e.g. For my son James in 200 level, call him when it arrives..." value={foodForm.desc} onChange={e=>setFoodForm({...foodForm, desc:e.target.value})}></textarea></div>
+              <button style={styles.btnGreen} type="submit">Save Food Item</button>
+            </form>
+          </div>
+        )}
 
-      {page==='login' && (
-        <div className="max-w-md mx-auto mt-10 p-6 bg-white border rounded-xl">
-          <h2 className="font-bold text-xl mb-4">Login</h2>
-          <form onSubmit={handleLogin} className="space-y-3">
-            <input value={login.email} onChange={e=>setLogin({...login, email:e.target.value})} placeholder="Email" className="w-full border p-2.5 rounded-lg text-sm"/>
-            <input type="password" value={login.password} onChange={e=>setLogin({...login, password:e.target.value})} placeholder="Password" className="w-full border p-2.5 rounded-lg text-sm"/>
-            <button className="w-full bg-green-600 text-white py-3 rounded-lg font-bold">Login</button>
-          </form>
-        </div>
-      )}
+        {activeTab==='myfoods' && (
+          <div style={{display:'grid', gap:'12px'}}>
+            {myFoods.length===0?<div style={styles.card}>No food yet. <span style={{color:'#16a34a', cursor:'pointer'}} onClick={()=>setActiveTab('add')}>Add first food</span></div>:
+            myFoods.map(f=>(
+              <div key={f.id} style={{...styles.card, display:'flex', justifyContent:'space-between', alignItems:'center'}}>
+                <div><h4 style={{margin:'0 0 6px'}}>{f.name} - {f.quantity} {f.unit}</h4><p style={{fontSize:'13px', color:'#6b7280', margin:0}}>{f.nature} | Quality: {f.quality} | {f.pickup} → {f.delivery} | {f.date} | <span style={{color:'#16a34a'}}>{f.status}</span></p></div>
+                <button style={{...styles.btnOutline, color:'#dc2626', borderColor:'#fecaca'}} onClick={()=>withdraw(f.id)}>Withdraw</button>
+              </div>
+            ))}
+          </div>
+        )}
+
+        {activeTab==='withdraw' && (
+          <div style={styles.card}>
+            <h3>Withdraw / Transfer Request</h3>
+            <p style={{color:'#6b7280'}}>Select food to withdraw or request delivery to final destination.</p>
+            {myFoods.map(f=>(
+              <div key={f.id} style={{border:'1px solid #e5e7eb', padding:'12px', borderRadius:'10px', marginTop:'12px', display:'flex', justifyContent:'space-between'}}>
+                <span>{f.name} ({f.quantity} {f.unit}) - {f.delivery}</span>
+                <button style={styles.btnGreen} onClick={()=>withdraw(f.id)}>Request Withdrawal</button>
+              </div>
+            ))}
+            <div style={{marginTop:'20px', background:'#f0fdf4', padding:'16px', borderRadius:'10px'}}><b>Need Help?</b><p style={{fontSize:'14px'}}>Call/WhatsApp: 08163831822 - We will deliver or prepare your stored food for pickup.</p></div>
+          </div>
+        )}
+      </div>
     </div>
   );
 }
