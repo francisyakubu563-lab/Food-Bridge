@@ -1,99 +1,180 @@
-import React, { useState } from 'react'
+import { useState, useEffect } from 'react';
+
+// LOGO COMPONENT - Basket on Bridge (Farm to City)
+const Logo = ({ size = 40 }) => (
+  <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+    <svg width={size} height={size} viewBox="0 0 100 100" fill="none">
+      {/* Bridge */}
+      <path d="M10 60 Q50 20 90 60" stroke="#16a34a" strokeWidth="6" fill="none" />
+      <path d="M10 70 Q50 30 90 70" stroke="#16a34a" strokeWidth="6" fill="none" />
+      {/* Basket */}
+      <path d="M35 45 L35 65 Q50 75 65 65 L65 45" fill="#d4a017" />
+      <path d="M35 45 Q50 35 65 45" fill="#facc15" />
+      {/* Food grains */}
+      <circle cx="42" cy="42" r="2" fill="#fef3c7" />
+      <circle cx="50" cy="38" r="2.5" fill="#fef3c7" />
+      <circle cx="58" cy="42" r="2" fill="#fef3c7" />
+      {/* Farm */}
+      <rect x="8" y="55" width="8" height="8" fill="#16a34a" />
+      {/* City */}
+      <rect x="82" y="50" width="5" height="15" fill="#d4a017" />
+    </svg>
+    <span style={{ fontWeight: 'bold', fontSize: size*0.5, color: '#14532d' }}>FoodBridge</span>
+  </div>
+);
 
 export default function App() {
-  const [showLogin, setShowLogin] = useState(false)
-  const [balance] = useState({ rice: 50, beans: 30, garri: 100 })
+  const [page, setPage] = useState('home');
+  const [user, setUser] = useState(null);
+  const [form, setForm] = useState({ fullName: '', phone: '', email: '', password: '', confirm: '', userType: 'consumer', location: '' });
+  const [loginForm, setLoginForm] = useState({ email: '', password: '' });
+
+  useEffect(() => {
+    const saved = localStorage.getItem('foodbridge_user');
+    if(saved) setUser(JSON.parse(saved));
+  }, []);
+
+  const handleRegister = (e) => {
+    e.preventDefault();
+    if(!form.fullName ||!form.phone ||!form.email ||!form.password) return alert('Fill all fields');
+    if(form.password!== form.confirm) return alert('Passwords do not match');
+    if(form.password.length < 6) return alert('Password min 6 chars');
+
+    const users = JSON.parse(localStorage.getItem('foodbridge_users') || '[]');
+    if(users.find(u => u.email === form.email)) return alert('Email already registered');
+
+    const newUser = {...form, id: Date.now() };
+    users.push(newUser);
+    localStorage.setItem('foodbridge_users', JSON.stringify(users));
+    localStorage.setItem('foodbridge_user', JSON.stringify(newUser));
+    setUser(newUser);
+    setPage('dashboard');
+    alert('Registration successful! Welcome to FoodBridge');
+  };
+
+  const handleLogin = (e) => {
+    e.preventDefault();
+    const users = JSON.parse(localStorage.getItem('foodbridge_users') || '[]');
+    const found = users.find(u => u.email === loginForm.email && u.password === loginForm.password);
+    if(!found) return alert('Invalid email or password');
+    localStorage.setItem('foodbridge_user', JSON.stringify(found));
+    setUser(found);
+    setPage('dashboard');
+  };
+
+  const logout = () => {
+    localStorage.removeItem('foodbridge_user');
+    setUser(null);
+    setPage('home');
+  };
 
   return (
-    <div style={{ minHeight: '100vh' }}>
+    <div style={{ fontFamily: 'Inter, sans-serif', minHeight: '100vh', background: '#f8fafc' }}>
       {/* NAV */}
-      <nav style={{ display:'flex', justifyContent:'space-between', alignItems:'center', padding:'18px 5%', background:'white', borderBottom:'1px solid #e5e7eb', position:'sticky', top:0, zIndex:10 }}>
-        <div style={{ display:'flex', alignItems:'center', gap:10 }}>
-          <div style={{ width:38, height:38, background:'#16a34a', borderRadius:10, display:'grid', placeItems:'center', color:'white', fontWeight:900 }}>FB</div>
-          <b style={{ fontSize:20 }}>FoodBridge</b>
-        </div>
-        <div style={{ display:'flex', gap:15 }}>
-          <button onClick={()=>setShowLogin(true)} style={{ padding:'8px 20px', borderRadius:20, border:'1px solid #16a34a', background:'white', color:'#16a34a', fontWeight:600 }}>Login</button>
-          <button onClick={()=>setShowLogin(true)} style={{ padding:'8px 20px', borderRadius:20, border:'none', background:'#16a34a', color:'white', fontWeight:600 }}>Get Started</button>
+      <nav style={{ display: 'flex', justifyContent: 'space-between', padding: '15px 30px', background: 'white', boxShadow: '0 2px 10px rgba(0,0,0,0.05)', alignItems: 'center' }}>
+        <div onClick={() => setPage('home')} style={{ cursor: 'pointer' }}><Logo /></div>
+        <div style={{ display: 'flex', gap: '15px' }}>
+          {!user? <>
+            <button onClick={() => setPage('login')} style={btnOutline}>Login</button>
+            <button onClick={() => setPage('register')} style={btnGreen}>Register</button>
+          </> : <>
+            <span style={{ padding: '8px' }}>Hi, {user.fullName.split(' ')[0]}</span>
+            <button onClick={() => setPage('dashboard')} style={btnOutline}>Dashboard</button>
+            <button onClick={logout} style={btnOutline}>Logout</button>
+          </>}
         </div>
       </nav>
 
-      {/* HERO */}
-      <section style={{ padding:'60px 5%', display:'flex', flexWrap:'wrap', gap:40, alignItems:'center', background:'linear-gradient(135deg,#f0fdf4,#fff)' }}>
-        <div style={{ flex:'1 1 400px' }}>
-          <span style={{ background:'#dcfce7', color:'#16a34a', padding:'6px 14px', borderRadius:20, fontSize:13, fontWeight:700 }}>THE BANK FOR FOODSTUFF</span>
-          <h1 style={{ fontSize:48, lineHeight:1.1, margin:'18px 0', fontWeight:900 }}>Transfer, Store, Exchange & Withdraw Food Anywhere in Nigeria</h1>
-          <p style={{ color:'#4b5563', fontSize:18, lineHeight:1.6 }}>FoodBridge is the first digital food bank. Farmers deposit harvest, families withdraw food in Abuja, Lagos, Kano — without moving bags. Save against inflation.</p>
-          <div style={{ display:'flex', gap:12, marginTop:24 }}>
-            <button onClick={()=>setShowLogin(true)} style={{ padding:'14px 28px', borderRadius:30, background:'#16a34a', color:'white', border:'none', fontWeight:700, fontSize:16 }}>Open Free Account</button>
-            <button style={{ padding:'14px 28px', borderRadius:30, background:'white', border:'1px solid #ddd', fontWeight:600 }}>Watch Demo</button>
-          </div>
-          <div style={{ display:'flex', gap:20, marginTop:30, color:'#6b7280', fontSize:14 }}>
-            <div><b style={{color:'#111', fontSize:18}}>2,500+</b><br/>Farmers</div>
-            <div><b style={{color:'#111', fontSize:18}}>10k Bags</b><br/>Secured</div>
-            <div><b style={{color:'#111', fontSize:18}}>36 States</b><br/>Coverage</div>
-          </div>
-        </div>
-        <div style={{ flex:'1 1 350px', background:'white', borderRadius:24, padding:24, boxShadow:'0 20px 40px rgba(0,0,0,0.08)', border:'1px solid #eee' }}>
-          <h3 style={{ marginBottom:16 }}>Your Food Wallet</h3>
-          <div style={{ display:'grid', gap:12 }}>
-            <div style={{ display:'flex', justifyContent:'space-between', padding:16, background:'#f0fdf4', borderRadius:14 }}><span>🍚 Rice</span><b>{balance.rice} mudu</b></div>
-            <div style={{ display:'flex', justifyContent:'space-between', padding:16, background:'#fefce8', borderRadius:14 }}><span>🫘 Beans</span><b>{balance.beans} mudu</b></div>
-            <div style={{ display:'flex', justifyContent:'space-between', padding:16, background:'#faf5ff', borderRadius:14 }}><span>🌾 Garri</span><b>{balance.garri} mudu</b></div>
-          </div>
-          <div style={{ display:'grid', gridTemplateColumns:'1fr 1fr', gap:10, marginTop:16 }}>
-            <button style={{ padding:12, borderRadius:12, background:'#16a34a', color:'white', border:'none', fontWeight:600 }}>Deposit</button>
-            <button style={{ padding:12, borderRadius:12, background:'#111827', color:'white', border:'none', fontWeight:600 }}>Withdraw</button>
-          </div>
-          <p style={{ fontSize:12, color:'#6b7280', marginTop:12, textAlign:'center' }}>Secured by Sterling Vaults • Insured</p>
-        </div>
-      </section>
+      {page === 'home' && (
+        <div>
+          <div style={{ textAlign: 'center', padding: '80px 20px', background: 'linear-gradient(135deg,#dcfce7,#fef9c3)' }}>
+            <Logo size={80} />
+            <h1 style={{ fontSize: '48px', color: '#14532d', margin: '20px 0' }}>Bridging Farms to Families</h1>
+            <p style={{ fontSize: '20px', color: '#4b5563', maxWidth: '700px', margin: '0 auto 30px' }}>Nigeria's first digital food bank. We connect farmers with surplus, donors, and families in need through a transparent basket-on-bridge system.</p>
+            <button onClick={() => setPage('register')} style={{...btnGreen, padding: '15px 30px', fontSize: '18px' }}>Join FoodBridge Now</button>
 
-      {/* HOW IT WORKS */}
-      <section style={{ padding:'60px 5%', background:'white' }}>
-        <h2 style={{ textAlign:'center', fontSize:32, fontWeight:800, marginBottom:10 }}>How FoodBridge Works</h2>
-        <p style={{ textAlign:'center', color:'#6b7280', marginBottom:40 }}>Like a bank, but for food</p>
-        <div style={{ display:'grid', gridTemplateColumns:'repeat(auto-fit,minmax(220px,1fr))', gap:20 }}>
-          {[
-            { step:'01', title:'Deposit', desc:'Take your harvest to our partner warehouse. We weigh, grade, and credit your FoodBridge account instantly.' },
-            { step:'02', title:'Store', desc:'We store safely with anti-pest, insurance. Your food value grows as market price increases.' },
-            { step:'03', title:'Transfer', desc:'Send 10 mudu rice to your mother in Abuja from your farm in Benue. She gets code to withdraw.' },
-            { step:'04', title:'Withdraw', desc:'Walk to any FoodBridge agent, show code, collect fresh equivalent food or cash.' },
-          ].map(c=>(
-            <div key={c.step} style={{ padding:24, border:'1px solid #e5e7eb', borderRadius:18 }}>
-              <div style={{ width:40, height:40, background:'#16a34a', color:'white', borderRadius:10, display:'grid', placeItems:'center', fontWeight:800 }}>{c.step}</div>
-              <h4 style={{ margin:'14px 0 8px', fontSize:18 }}>{c.title}</h4>
-              <p style={{ color:'#6b7280', fontSize:14, lineHeight:1.6 }}>{c.desc}</p>
+            {/* FOUNDER */}
+            <div style={{ marginTop: '60px', background: 'white', maxWidth: '600px', margin: '60px auto 0', padding: '25px', borderRadius: '20px', display: 'flex', gap: '20px', alignItems: 'center', boxShadow: '0 10px 30px rgba(0,0,0,0.1)' }}>
+              <img src="https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=200" alt="founder" style={{ width: '90px', height: '90px', borderRadius: '50%', objectFit: 'cover' }} />
+              <div style={{ textAlign: 'left' }}>
+                <h3 style={{ margin: 0 }}>Founder - Abuja, FCT</h3>
+                <p style={{ margin: '5px 0', color: '#6b7280' }}>"I built FoodBridge to end food waste and hunger in Nigeria. Every basket shared is a bridge to hope."</p>
+              </div>
             </div>
-          ))}
+          </div>
+
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit,minmax(250px,1fr))', gap: '20px', padding: '40px', maxWidth: '1100px', margin: '0 auto' }}>
+            {[
+              { t: 'For Farmers', d: 'Sell surplus, reduce waste, earn more' },
+              { t: 'For Families', d: 'Access affordable fresh food near you' },
+              { t: 'For Donors', d: 'Track your impact, transparent donations' },
+            ].map(c => (
+              <div key={c.t} style={{ background: 'white', padding: '25px', borderRadius: '15px', boxShadow: '0 4px 10px rgba(0,0,0,0.05)' }}>
+                <h3 style={{ color: '#16a34a' }}>{c.t}</h3><p>{c.d}</p>
+              </div>
+            ))}
+          </div>
         </div>
-      </section>
+      )}
 
-      {/* FOUNDER */}
-      <section style={{ padding:'50px 5%', background:'#111827', color:'white', display:'flex', flexWrap:'wrap', gap:30, alignItems:'center', borderRadius:24, margin:'20px 5%' }}>
-        <img src="https://i.pravatar.cc/150?img=68" alt="Francis" style={{ width:100, height:100, borderRadius:'50%', border:'3px solid #16a34a' }} />
-        <div style={{ flex:'1 1 300px' }}>
-          <h3 style={{ fontSize:22 }}>Built by Francis Yakubu</h3>
-          <p style={{ color:'#9ca3af', marginTop:8, lineHeight:1.6 }}>Founder & CEO, FoodBridge. Vision: End food waste, stop hunger transfer cost, and make every Nigerian a food bank owner. "If money can be banked, why not food?"</p>
+      {page === 'register' && (
+        <div style={formWrap}>
+          <div style={formCard}>
+            <h2>Join FoodBridge</h2>
+            <p>Create your account - 100% free</p>
+            <form onSubmit={handleRegister} style={{ display: 'flex', flexDirection: 'column', gap: '12px', marginTop: '20px' }}>
+              <input placeholder="Full Name *" style={input} value={form.fullName} onChange={e => setForm({...form, fullName: e.target.value })} />
+              <input placeholder="Phone Number (e.g. 080...)*" style={input} value={form.phone} onChange={e => setForm({...form, phone: e.target.value })} />
+              <input placeholder="Email *" type="email" style={input} value={form.email} onChange={e => setForm({...form, email: e.target.value })} />
+              <input placeholder="Location (e.g. Abuja)" style={input} value={form.location} onChange={e => setForm({...form, location: e.target.value })} />
+              <select style={input} value={form.userType} onChange={e => setForm({...form, userType: e.target.value })}>
+                <option value="consumer">I need food (Consumer)</option>
+                <option value="farmer">I am a Farmer</option>
+                <option value="donor">I want to Donate</option>
+                <option value="volunteer">Volunteer / Rider</option>
+              </select>
+              <input placeholder="Password *" type="password" style={input} value={form.password} onChange={e => setForm({...form, password: e.target.value })} />
+              <input placeholder="Confirm Password *" type="password" style={input} value={form.confirm} onChange={e => setForm({...form, confirm: e.target.value })} />
+              <button type="submit" style={btnGreen}>Create Account</button>
+            </form>
+            <p style={{ marginTop: '15px' }}>Already have account? <span onClick={() => setPage('login')} style={{ color: '#16a34a', cursor: 'pointer' }}>Login</span></p>
+          </div>
         </div>
-        <div style={{ background:'#16a34a', padding:'12px 20px', borderRadius:30, fontWeight:700 }}>Abuja • Nigeria</div>
-      </section>
+      )}
 
-      {/* FOOTER */}
-      <footer style={{ textAlign:'center', padding:30, color:'#6b7280', fontSize:13 }}>© 2026 FoodBridge. The Bank for Foodstuff. All rights reserved.</footer>
+      {page === 'login' && (
+        <div style={formWrap}>
+          <div style={formCard}>
+            <h2>Welcome Back</h2>
+            <form onSubmit={handleLogin} style={{ display: 'flex', flexDirection: 'column', gap: '12px', marginTop: '20px' }}>
+              <input placeholder="Email" type="email" style={input} value={loginForm.email} onChange={e => setLoginForm({...loginForm, email: e.target.value })} />
+              <input placeholder="Password" type="password" style={input} value={loginForm.password} onChange={e => setLoginForm({...loginForm, password: e.target.value })} />
+              <button type="submit" style={btnGreen}>Login</button>
+            </form>
+            <p style={{ marginTop: '15px' }}>No account? <span onClick={() => setPage('register')} style={{ color: '#16a34a', cursor: 'pointer' }}>Register</span></p>
+          </div>
+        </div>
+      )}
 
-      {/* LOGIN MODAL */}
-      {showLogin && (
-        <div onClick={()=>setShowLogin(false)} style={{ position:'fixed', inset:0, background:'rgba(0,0,0,0.5)', display:'grid', placeItems:'center', zIndex:50, padding:20 }}>
-          <div onClick={e=>e.stopPropagation()} style={{ background:'white', padding:30, borderRadius:20, width:'100%', maxWidth:380 }}>
-            <h3 style={{ fontSize:22, fontWeight:800 }}>Welcome to FoodBridge</h3>
-            <p style={{ color:'#6b7280', margin:'8px 0 20px' }}>Enter phone to continue</p>
-            <input placeholder="0803 000 0000" style={{ width:'100%', padding:14, borderRadius:12, border:'1px solid #ddd', marginBottom:12 }} />
-            <button onClick={()=>{setShowLogin(false); alert('Dashboard coming next after deployment!')}} style={{ width:'100%', padding:14, borderRadius:12, background:'#16a34a', color:'white', border:'none', fontWeight:700 }}>Continue</button>
-            <button onClick={()=>setShowLogin(false)} style={{ width:'100%', marginTop:10, background:'none', border:'none', color:'#6b7280' }}>Close</button>
+      {page === 'dashboard' && user && (
+        <div style={{ padding: '40px', maxWidth: '900px', margin: '0 auto' }}>
+          <h1>Dashboard - Hello {user.fullName} 👋</h1>
+          <div style={{ background: 'white', padding: '20px', borderRadius: '15px', marginTop: '20px' }}>
+            <p><b>Name:</b> {user.fullName}</p>
+            <p><b>Phone:</b> {user.phone}</p>
+            <p><b>Email:</b> {user.email}</p>
+            <p><b>Type:</b> {user.userType}</p>
+            <p><b>Location:</b> {user.location}</p>
+            <p style={{ marginTop: '20px', color: '#16a34a', fontWeight: 'bold' }}>✅ Registration working! Your account is saved in browser.</p>
           </div>
         </div>
       )}
     </div>
-  )
+  );
 }
+
+const btnGreen = { background: '#16a34a', color: 'white', border: 'none', padding: '10px 20px', borderRadius: '10px', cursor: 'pointer', fontWeight: 'bold' };
+const btnOutline = { background: 'white', color: '#16a34a', border: '1px solid #16a34a', padding: '10px 20px', borderRadius: '10px', cursor: 'pointer' };
+const input = { padding: '12px', borderRadius: '10px', border: '1px solid #d1d5db', fontSize: '15px' };
+const formWrap = { display: 'flex', justifyContent: 'center', padding: '50px 20px' };
+const formCard = { background: 'white', padding: '35px', borderRadius: '20px', width: '100%', maxWidth: '450px', boxShadow: '0 10px 30px rgba(0,0,0,0.1)' };
