@@ -6,7 +6,6 @@ export default function App(){
   const [page,setPage]=useState('home');
   const green='#166534';
 
-  // ABOUT PAGE - ONLY WHEN CLICK ABOUT IN DROPDOWN
   if(page==='about'){
     return(
       <div style={{fontFamily:'Inter,sans-serif',background:'white',minHeight:'100vh'}}>
@@ -17,36 +16,24 @@ export default function App(){
         <div style={{padding:'30px 16px',background:'#F5F1E8'}}>
           <p style={{color:green,fontWeight:800,fontSize:11}}>ABOUT US</p>
           <h1 style={{fontSize:28,fontWeight:900,marginTop:8}}>Connecting Food.<br/>Bridging Families.</h1>
-          
           <div style={{marginTop:20,background:'white',borderRadius:14,padding:18,border:'1px solid #e7e0d0'}}>
             <b>COMPANY DESCRIPTION</b>
-            <p style={{fontSize:14,lineHeight:1.6,marginTop:8,color:'#334155'}}>
-              FoodBridge is a Nigerian food logistics and storage company created to make it easier, faster, safer, and more affordable to move and preserve foodstuff. We help mothers and families send food to loved ones, especially students living away from home, while providing reliable storage solutions for households, businesses, and large organizations. FoodBridge also supports businesses by providing cost-effective and efficient transportation of foodstuff from one location to another.
-            </p>
+            <p style={{fontSize:14,lineHeight:1.6,marginTop:8,color:'#334155'}}>FoodBridge is a Nigerian food logistics and storage company created to make it easier, faster, safer, and more affordable to move and preserve foodstuff.</p>
           </div>
-
           <div style={{marginTop:14,background:'white',borderRadius:14,padding:18,border:'1px solid #e7e0d0'}}>
             <b style={{color:green}}>VISION</b>
-            <p style={{fontSize:14,lineHeight:1.6,marginTop:6,color:'#334155'}}>
-              To become Nigerias most trusted food logistics and storage network, connecting families, businesses, and communities while ensuring that food gets where it is needed safely, affordably, and on time.
-            </p>
+            <p style={{fontSize:14,lineHeight:1.6,marginTop:6,color:'#334155'}}>To become Nigerias most trusted food logistics and storage network.</p>
           </div>
-
           <div style={{marginTop:14,background:'white',borderRadius:14,padding:18,border:'1px solid #e7e0d0'}}>
             <b style={{color:green}}>MISSION</b>
-            <p style={{fontSize:14,lineHeight:1.6,marginTop:6,color:'#334155'}}>
-              To simplify the movement and preservation of food in Nigeria by providing fast, affordable, safe, and reliable transportation and storage solutions for families, students, businesses, and organizations.
-            </p>
+            <p style={{fontSize:14,lineHeight:1.6,marginTop:6,color:'#334155'}}>To simplify the movement and preservation of food in Nigeria.</p>
           </div>
-
           <div style={{marginTop:14,background:'#111827',color:'white',borderRadius:14,padding:18}}>
             <b>CORE PURPOSE</b>
-            <p style={{fontSize:14,marginTop:6,color:'#cbd5e1'}}>FoodBridge exists to bridge the gap between where food is available and where it is needed, making food transportation and storage easier, faster, safer, and more affordable for Nigerians.</p>
+            <p style={{fontSize:14,marginTop:6,color:'#cbd5e1'}}>FoodBridge exists to bridge the gap between where food is available and where it is needed.</p>
             <div style={{marginTop:16,display:'grid',gridTemplateColumns:'1fr 1fr',gap:10,fontSize:13}}>
               <div><span style={{color:'#94a3b8'}}>FOUNDER</span><br/><b>Francis Yakubu</b></div>
               <div><span style={{color:'#94a3b8'}}>LOCATION</span><br/><b>Gwagwalada, Abuja</b></div>
-              <div><span style={{color:'#94a3b8'}}>FOUNDED</span><br/><b>2026</b></div>
-              <div><span style={{color:'#94a3b8'}}>TAGLINE</span><br/><b>Connecting Food. Bridging Families.</b></div>
             </div>
           </div>
         </div>
@@ -59,7 +46,7 @@ export default function App(){
       <div style={{minHeight:'100vh',background:'#f8fafc',fontFamily:'Inter,sans-serif'}}>
         <div style={{background:'white',padding:'40px',textAlign:'center'}}><div style={{width:72,height:72,background:green,borderRadius:16,margin:'0 auto',display:'flex',alignItems:'center',justifyContent:'center',color:'white',fontSize:34,fontWeight:900}}>F</div><h1 style={{color:green,marginTop:12}}>FoodBridge</h1></div>
         <div style={{maxWidth:400,margin:'30px auto',background:'white',padding:24,borderRadius:16,border:'1px solid #eee'}}>
-          <h2 style={{fontWeight:800}}>Welcome back to FoodBridge</h2>
+          <h2 style={{fontWeight:800}}>Welcome back</h2>
           <input placeholder="Email" style={{width:'100%',padding:12,borderRadius:8,border:'1px solid #ddd',marginTop:15}}/>
           <input placeholder="Password" type="password" style={{width:'100%',padding:12,borderRadius:8,border:'1px solid #ddd',marginTop:10}}/>
           <button style={{width:'100%',background:green,color:'white',padding:12,borderRadius:8,border:'none',marginTop:15,fontWeight:700}}>Sign In</button>
@@ -69,7 +56,6 @@ export default function App(){
     )
   }
 
-  // HOME PAGE - CLEAN, NO VISION/MISSION HERE - LIKE SELLSYNC
   return(
     <div style={{fontFamily:'Inter,sans-serif',background:'white',color:'#111'}}>
       <header style={{display:'flex',justifyContent:'space-between',alignItems:'center',padding:'12px 16px',borderBottom:'1px solid #eee',position:'sticky',top:0,background:'white',zIndex:99}}>
@@ -93,8 +79,8 @@ export default function App(){
 
       <section style={{textAlign:'center',padding:'50px 16px 30px'}}>
         <h1 style={{fontSize:36,fontWeight:900,lineHeight:1.05}}>ONE PLATFORM<br/><span style={{color:green}}>TOTAL FOOD CONTROL</span></h1>
-        <p style={{color:'#475569',fontSize:15,maxWidth:520,margin:'18px auto'}}>FoodBridge connects food donors, inventory, analytics and community into one powerful system to reduce waste and fight hunger in Nigeria.</p>
-        <button onClick={()=>document.getElementById('features')?.scrollIntoView({behavior:'smooth'})} style={{background:'#111827',color:'white',padding:'13px 26px',borderRadius:10,border:'none',fontWeight:700}}>Get Started</button>
+        <p style={{color:'#475569',fontSize:15,maxWidth:520,margin:'18px auto'}}>FoodBridge connects food donors, inventory, analytics and community into one powerful system.</p>
+        <button style={{background:'#111827',color:'white',padding:'13px 26px',borderRadius:10,border:'none',fontWeight:700}}>Get Started</button>
         <div style={{margin:'30px auto 0',maxWidth:640,borderRadius:18,overflow:'hidden',border:'1px solid #e2e8f0'}}>
           <img src="https://images.unsplash.com/photo-1593113598332-cd288d649433?w=900" style={{width:'100%'}} alt="food"/>
         </div>
@@ -109,46 +95,33 @@ export default function App(){
         </div>
       </section>
 
-      <section id="blog" style={{padding:'40px 16px'}}>
-        <h2 style={{fontSize:22,fontWeight:800,textAlign:'center'}}>Get started in minutes</h2>
-        <div style={{marginTop:20,display:'grid',gap:14}}>
-          <div style={{background:'#f8fafc',border:'1px solid #e2e8f0',borderRadius:12,padding:16}}><b>1. Sign Up and Connect</b><p style={{fontSize:13,color:'#64748b'}}>Create your FoodBridge account.</p></div>
-          <div style={{background:'#f8fafc',border:'1px solid #e2e8f0',borderRadius:12,padding:16}}><b>2. Sync Your Food</b><p style={{fontSize:13,color:'#64748b'}}>Send food to loved ones.</p></div>
-          <div style={{background:'#f8fafc',border:'1px solid #e2e8f0',borderRadius:12,padding:16}}><b>3. Gain Impact</b><p style={{fontSize:13,color:'#64748b'}}>Reduce waste, feed Abuja.</p></div>
-        </div>
-      </section>
-
-      <section id="support" style={{padding:'30px 16px',background:'#f8fafc'}}>
-        <h2 style={{fontWeight:800,textAlign:'center'}}>Pricing</h2>
-        <div style={{display:'grid',gridTemplateColumns:'1fr 1fr',gap:12,marginTop:16}}>
-          <div style={{background:'white',border:'1px solid #e2e8f0',borderRadius:12,padding:16}}><b>Starter</b><p style={{fontSize:12}}>FREE</p></div>
-          <div style={{background:'#111827',color:'white',borderRadius:12,padding:16}}><b>Growth</b><p style={{fontSize:12}}>5000 per month</p></div>
-        </div>
-      </section>
-
       <section id="contact" style={{padding:'35px 16px'}}>
         <h2 style={{fontWeight:800,textAlign:'center'}}>Contact Us</h2>
-        <input placeholder="Full Name" style={{width:'100%',padding:12,borderRadius:8,border:'1px solid #ddd',marginTop:15}}/>
-        <input placeholder="Email" style={{width:'100%',padding:12,borderRadius:8,border:'1px solid #ddd',marginTop:10}}/>
-        <textarea placeholder="Message..." style={{width:'100%',padding:12,borderRadius:8,border:'1px solid #ddd',marginTop:10,height:70}}></textarea>
-        <button style={{width:'100%',background:'#111',color:'white',padding:12,borderRadius:8,border:'none',marginTop:10}}>Send Message</button>
         <div style={{marginTop:18,background:'#F5F1E8',padding:14,borderRadius:10,fontSize:13,lineHeight:1.8}}>
-          Email: foodbridge.nigeria@gmail.com<br/>Phone: 0816-383-1822<br/>Location: Gwagwalada, Abuja<br/>Founder: Francis Yakubu
+          Email: foodbridge.nigeria@gmail.com<br/>Phone: 0816-383-1822<br/>Location: Gwagwalada, Abuja
         </div>
       </section>
 
-      <footer style={{background:'#111827',color:'#94a3b8',padding:25,fontSize:12}}>
-        <div style={{color:'white',fontWeight:800,fontSize:16}}>FOODBRIDGE</div>
-        <p style={{marginTop:6}}>Connecting Food. Bridging Families.</p>
-        <div style={{marginTop:14,display:'flex',gap:14,fontSize:20}}>
-          <a href="https://facebook.com" target="_blank" style={{color:'white',textDecoration:'none'}}>📘</a>
-          <a href="https://instagram.com" target="_blank" style={{color:'white',textDecoration:'none'}}>📸</a>
-          <a href="https://twitter.com" target="_blank" style={{color:'white',textDecoration:'none'}}>🐦</a>
-          <a href="https://wa.me/2348163831822" target="_blank" style={{color:'white',textDecoration:'none'}}>💬</a>
-          <a href="https://linkedin.com" target="_blank" style={{color:'white',textDecoration:'none'}}>🔗</a>
+      <footer style={{background:'white',padding:'25px 16px',borderTop:'1px solid #eee'}}>
+        <div style={{display:'flex',flexDirection:'column',gap:12}}>
+          <a href="https://www.tiktok.com/@foodbridge.ng.lim?_r=1&_t=ZS-9A5NZ6zEsQG" target="_blank" rel="noopener noreferrer" style={{display:'flex',alignItems:'center',gap:10,textDecoration:'none'}}>
+            <div style={{width:36,height:36,background:'black',borderRadius:8,display:'flex',alignItems:'center',justifyContent:'center'}}>
+              <span style={{color:'white',fontWeight:900,fontSize:20,textShadow:'2px 0 #ff0050, -2px 0 #00f2ea'}}>♪</span>
+            </div>
+            <span style={{color:'black',fontWeight:700,fontSize:18,fontFamily:'Arial'}}>TikTok</span>
+          </a>
+          <a href="https://www.facebook.com/profile.php?id=61594798832703&mibextid=rS40aB7S9Ucbxw6v" target="_blank" rel="noopener noreferrer" style={{display:'flex',alignItems:'center',gap:10,textDecoration:'none'}}>
+            <div style={{width:36,height:36,background:'#1877F2',borderRadius:8,display:'flex',alignItems:'center',justifyContent:'center',color:'white',fontWeight:900,fontSize:22}}>f</div>
+            <span style={{color:'#1877F2',fontWeight:700,fontSize:18,fontFamily:'Arial'}}>facebook</span>
+          </a>
+          <a href="https://www.youtube.com/@foodbridgeNigeria" target="_blank" rel="noopener noreferrer" style={{display:'flex',alignItems:'center',gap:10,textDecoration:'none'}}>
+            <div style={{width:36,height:36,background:'#FF0000',borderRadius:8,display:'flex',alignItems:'center',justifyContent:'center'}}>
+              <div style={{width:0,height:0,borderLeft:'10px solid white',borderTop:'6px solid transparent',borderBottom:'6px solid transparent',marginLeft:2}}></div>
+            </div>
+            <span style={{color:'black',fontWeight:700,fontSize:18,fontFamily:'Arial'}}>YouTube</span>
+          </a>
         </div>
-        <p style={{marginTop:14}}>© 2026 FoodBridge. Gwagwalada, Abuja. Founder Francis Yakubu.</p>
-        <p style={{marginTop:6,fontSize:11}}>foodbridge.nigeria@gmail.com | 0816-383-1822</p>
+        <p style={{marginTop:20,fontSize:11,color:'#64748b'}}>© 2026 FoodBridge. Gwagwalada, Abuja. Founder Francis Yakubu.</p>
       </footer>
     </div>
   )
