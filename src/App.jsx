@@ -42,56 +42,6 @@ export default function App(){
             <b>COMPANY DESCRIPTION</b>
             <p style={{fontSize:14,lineHeight:1.6,marginTop:8,color:'#334155'}}>FoodBridge is a Nigerian food logistics and storage company created to make it easier, faster, safer, and more affordable to move and preserve foodstuff.</p>
           </div>
-
-          {/* HOW IT WORKS NOW MOVED UP - BEFORE VISION/MISSION */}
-          <div style={{marginTop:14,background:'white',borderRadius:14,padding:18,border:'1px solid #e7e0d0'}}>
-            <h2 style={{fontSize:20,fontWeight:900,color:green}}>How FoodBridge Works</h2>
-            <p style={{fontSize:14,lineHeight:1.6,marginTop:10,color:'#334155'}}>At FoodBridge, we make it easier, safer, faster, and more affordable to transport, store, buy, and sell foodstuff across Nigeria. Whether you are an individual, student, family, company, organization, school, supplier, or large-scale business, FoodBridge provides flexible solutions designed around your needs.</p>
-            <p style={{fontSize:14,fontWeight:700,marginTop:12}}>Our services are built around three major categories:</p>
-
-            <div style={{marginTop:15,background:'#F5F1E8',borderRadius:12,padding:14}}>
-              <b style={{color:green}}>1. Foodstuff Transportation & Delivery</b>
-              <p style={{fontSize:13,lineHeight:1.6,marginTop:8,color:'#334155'}}>FoodBridge helps individuals, families, students, companies, organizations, and businesses transport foodstuff from one location to another, whether in small or large quantities.</p>
-              <p style={{fontSize:13,fontWeight:700,marginTop:10}}>How It Works</p>
-              <p style={{fontSize:13,lineHeight:1.6,marginTop:6,color:'#334155'}}>To use our transportation service, the sender creates a FoodBridge account and provides the required details. Customers can register under the account type that best describes their needs:<br/><br/>
-              <b>Personal Account</b> – for individuals sending or receiving foodstuff.<br/>
-              <b>Family Account</b> – for families sending foodstuff to relatives and loved ones.<br/>
-              <b>Student Account</b> – for students receiving foodstuff from parents, guardians, or family members.<br/>
-              <b>Company/Organization Account</b> – for businesses and organizations transporting foodstuff to their branches, clients, employees, customers, or other destinations.<br/><br/>
-              The sender and recipient will normally have their details registered with FoodBridge so that every delivery can be properly identified, tracked, and handed over to the right person.<br/><br/>
-              <b>Simply put:</b> Deposit → Register the shipment → Provide sender and recipient details → FoodBridge transports the foodstuff → Recipient picks up or receives it at the designated destination.
-              </p>
-            </div>
-
-            <div style={{marginTop:15,background:'#F5F1E8',borderRadius:12,padding:14}}>
-              <b style={{color:green}}>2. Foodstuff Storage</b>
-              <p style={{fontSize:13,lineHeight:1.6,marginTop:8,color:'#334155'}}>FoodBridge provides short-term and long-term foodstuff storage solutions for individuals, families, companies, organizations, schools, suppliers, and businesses.</p>
-              <p style={{fontSize:13,fontWeight:700,marginTop:10}}>How It Works</p>
-              <p style={{fontSize:13,lineHeight:1.6,marginTop:6,color:'#334155'}}>When bringing foodstuff to FoodBridge, the customer must indicate what the foodstuff is intended for: Storage or Transportation.<br/><br/>
-              <b>Simply put:</b> Bring your foodstuff → Create/verify your FoodBridge account → Select Storage → Provide the required details → Agree on the storage period → FoodBridge stores your foodstuff → Collect it when needed.
-              </p>
-            </div>
-
-            <div style={{marginTop:15,background:'#F5F1E8',borderRadius:12,padding:14}}>
-              <b style={{color:green}}>3. Buying & Selling Foodstuff</b>
-              <p style={{fontSize:13,lineHeight:1.6,marginTop:8,color:'#334155'}}>FoodBridge is also a marketplace for buying and selling foodstuff in both small and large quantities.</p>
-              <p style={{fontSize:13,fontWeight:700,marginTop:12}}>If You Want to Buy</p>
-              <p style={{fontSize:13,lineHeight:1.6,marginTop:6,color:'#334155'}}>You can purchase foodstuff in: Small, Medium, Large, Bulk quantities. After purchasing, you can arrange for transportation to your desired destination.</p>
-              <p style={{fontSize:13,fontWeight:700,marginTop:12}}>If You Want to Sell</p>
-              <p style={{fontSize:13,lineHeight:1.6,marginTop:6,color:'#334155'}}>You can bring your foodstuff to FoodBridge and indicate that you want to sell it. FoodBridge buys foodstuff at different scales, subject to quality, quantity, pricing, and purchasing requirements.<br/><br/>
-              <b>Simply put:</b> Bring foodstuff → Tell us whether you want to Sell, Store, or Transport → FoodBridge processes your request.
-              </p>
-            </div>
-
-            <div style={{marginTop:15,background:'#111827',color:'white',borderRadius:12,padding:16}}>
-              <b>One FoodBridge, Multiple Solutions</b>
-              <p style={{fontSize:13,marginTop:8,color:'#cbd5e1',lineHeight:1.6}}>Whether you want to send foodstuff to a loved one, store foodstuff, buy in small or large quantities, sell your foodstuff, transport to a customer, or supply to a school/organization — FoodBridge makes it simple, reliable, affordable, and convenient.</p>
-              <p style={{marginTop:12,fontWeight:800,color:'#22c55e'}}>Your Food. Your Destination. Your Choice.</p>
-              <p style={{marginTop:4,fontWeight:800}}>FoodBridge — Connecting Food, People & Places.</p>
-            </div>
-          </div>
-
-          {/* VISION / MISSION NOW AT BOTTOM */}
           <div style={{marginTop:14,background:'white',borderRadius:14,padding:18,border:'1px solid #e7e0d0'}}>
             <b style={{color:green}}>VISION</b>
             <p style={{fontSize:14,lineHeight:1.6,marginTop:6,color:'#334155'}}>To become Nigerias most trusted food logistics and storage network.</p>
@@ -106,6 +56,78 @@ export default function App(){
             <div style={{marginTop:16,display:'grid',gridTemplateColumns:'1fr 1fr',gap:10,fontSize:13}}>
               <div><span style={{color:'#94a3b8'}}>FOUNDER</span><br/><b>Francis Yakubu</b></div>
               <div><span style={{color:'#94a3b8'}}>LOCATION</span><br/><b>Gwagwalada, Abuja</b></div>
+            </div>
+          </div>
+
+          {/* NEW SECTION YOU SENT - ONLY ADDITION */}
+          <div style={{marginTop:25,background:'white',borderRadius:14,padding:18,border:'1px solid #e7e0d0'}}>
+            <h2 style={{fontSize:20,fontWeight:900,color:green}}>How FoodBridge Works</h2>
+            <p style={{fontSize:14,lineHeight:1.6,marginTop:10,color:'#334155'}}>At FoodBridge, we make it easier, safer, faster, and more affordable to transport, store, buy, and sell foodstuff across Nigeria. Whether you are an individual, student, family, company, organization, school, supplier, or large-scale business, FoodBridge provides flexible solutions designed around your needs.</p>
+            <p style={{fontSize:14,fontWeight:700,marginTop:12}}>Our services are built around three major categories:</p>
+
+            <div style={{marginTop:15,background:'#F5F1E8',borderRadius:12,padding:14}}>
+              <b style={{color:green}}>1. Foodstuff Transportation & Delivery</b>
+              <p style={{fontSize:13,lineHeight:1.6,marginTop:8,color:'#334155'}}>FoodBridge helps individuals, families, students, companies, organizations, and businesses transport foodstuff from one location to another, whether in small or large quantities.</p>
+              <p style={{fontSize:13,fontWeight:700,marginTop:10}}>How It Works</p>
+              <p style={{fontSize:13,lineHeight:1.6,marginTop:6,color:'#334155'}}>To use our transportation service, the sender creates a FoodBridge account and provides the required details. Customers can register under the account type that best describes their needs:<br/><br/>
+              <b>Personal Account</b> – for individuals sending or receiving foodstuff.<br/>
+              <b>Family Account</b> – for families sending foodstuff to relatives and loved ones.<br/>
+              <b>Student Account</b> – for students receiving foodstuff from parents, guardians, or family members.<br/>
+              <b>Company/Organization Account</b> – for businesses and organizations transporting foodstuff to their branches, clients, employees, customers, or other destinations.<br/><br/>
+              The sender and recipient will normally have their details registered with FoodBridge so that every delivery can be properly identified, tracked, and handed over to the right person.<br/><br/>
+              For example, a mother with a Personal or Family Account can send foodstuff to her son or daughter who has a Student Account at school. Similarly, a company can send foodstuff or supplies to its customers, employees, branches, distributors, or business partners by providing the required recipient information.<br/><br/>
+              FoodBridge operates through designated deposit and pickup locations/branches, making it easier for customers to drop off and collect their foodstuff.<br/><br/>
+              <b>Simply put:</b><br/>Deposit → Register the shipment → Provide sender and recipient details → FoodBridge transports the foodstuff → Recipient picks up or receives it at the designated destination.
+              </p>
+            </div>
+
+            <div style={{marginTop:15,background:'#F5F1E8',borderRadius:12,padding:14}}>
+              <b style={{color:green}}>2. Foodstuff Storage</b>
+              <p style={{fontSize:13,lineHeight:1.6,marginTop:8,color:'#334155'}}>FoodBridge provides short-term and long-term foodstuff storage solutions for individuals, families, companies, organizations, schools, suppliers, and businesses.</p>
+              <p style={{fontSize:13,fontWeight:700,marginTop:10}}>How It Works</p>
+              <p style={{fontSize:13,lineHeight:1.6,marginTop:6,color:'#334155'}}>When bringing foodstuff to FoodBridge, the customer must indicate what the foodstuff is intended for: Storage or Transportation.<br/><br/>
+              If the customer chooses Storage, the foodstuff will be registered and handled according to the agreed storage arrangement and duration.<br/><br/>
+              Storage may be suitable for:<br/>
+              • Individuals who need to keep foodstuff temporarily.<br/>
+              • Families storing food for future use.<br/>
+              • Students or parents managing food supplies.<br/>
+              • Companies keeping food inventory.<br/>
+              • Organizations and institutions.<br/>
+              • Food suppliers and traders.<br/>
+              • Businesses that need additional storage space.<br/><br/>
+              <b>Simply put:</b><br/>Bring your foodstuff → Create/verify your FoodBridge account → Select Storage → Provide the required details → Agree on the storage period → FoodBridge stores your foodstuff → Collect it when needed.<br/><br/>
+              FoodBridge can therefore serve as an extension of your own storage capacity.
+              </p>
+            </div>
+
+            <div style={{marginTop:15,background:'#F5F1E8',borderRadius:12,padding:14}}>
+              <b style={{color:green}}>3. Buying & Selling Foodstuff</b>
+              <p style={{fontSize:13,lineHeight:1.6,marginTop:8,color:'#334155'}}>FoodBridge is also a marketplace for buying and selling foodstuff in both small and large quantities. This service allows individuals, companies, organizations, schools, suppliers, farmers, traders, and other food businesses to participate in the buying and selling of foodstuff through FoodBridge.</p>
+              
+              <p style={{fontSize:13,fontWeight:700,marginTop:12}}>If You Want to Buy</p>
+              <p style={{fontSize:13,lineHeight:1.6,marginTop:6,color:'#334155'}}>Individuals, companies, schools, organizations, restaurants, businesses, and other customers can come to FoodBridge to purchase foodstuff in the quantity they need.<br/>
+              You can purchase foodstuff in: Small quantities, Medium quantities, Large quantities, Bulk quantities.<br/>After purchasing, you can arrange for the foodstuff to be transported to your desired destination through FoodBridge.</p>
+
+              <p style={{fontSize:13,fontWeight:700,marginTop:12}}>If You Want to Sell</p>
+              <p style={{fontSize:13,lineHeight:1.6,marginTop:6,color:'#334155'}}>FoodBridge also provides an opportunity for individuals, farmers, suppliers, companies, traders, and organizations to sell their foodstuff.<br/>You can bring your foodstuff to FoodBridge and indicate that you want to sell it. FoodBridge buys foodstuff at different scales, subject to the applicable product, quality, quantity, pricing, and purchasing requirements.<br/>You can also choose to bring your foodstuff to FoodBridge for storage or transportation instead of selling it.<br/><br/>
+              <b>Simply put:</b><br/>Bring foodstuff → Tell us whether you want to Sell, Store, or Transport → FoodBridge processes your request.<br/>Or:<br/>Visit FoodBridge → Buy the foodstuff you need → Arrange transportation → FoodBridge helps move it to your desired destination.
+              </p>
+            </div>
+
+            <div style={{marginTop:15,background:'#111827',color:'white',borderRadius:12,padding:16}}>
+              <b>One FoodBridge, Multiple Solutions</b>
+              <p style={{fontSize:13,marginTop:8,color:'#cbd5e1',lineHeight:1.6}}>FoodBridge brings transportation, storage, buying, and selling together in one convenient system.<br/><br/>
+              Whether you want to:<br/>
+              • Send foodstuff to a loved one<br/>
+              • Store foodstuff for a short or long period<br/>
+              • Buy foodstuff in small or large quantities<br/>
+              • Sell your foodstuff<br/>
+              • Transport foodstuff to a customer or business<br/>
+              • Supply foodstuff to a school, organization, or company<br/><br/>
+              FoodBridge is designed to make the process simple, reliable, affordable, and convenient.
+              </p>
+              <p style={{marginTop:12,fontWeight:800,color:'#22c55e'}}>Your Food. Your Destination. Your Choice.</p>
+              <p style={{marginTop:4,fontWeight:800}}>FoodBridge — Connecting Food, People & Places.</p>
             </div>
           </div>
 
