@@ -193,7 +193,9 @@ export default function App(){
           {sol && <div style={{padding:'0 0 12px 12px',fontSize:14,lineHeight:2.2,color:'#444'}}><div>Food Donation Management</div><div>Waste Tracking and Analytics</div><div>Volunteer Connect</div><div>Community Sharing</div></div>}
           <div onClick={()=>{setMenu(false);setPage('about')}} style={{padding:'18px 0',borderBottom:'1px solid #f1f5f9',cursor:'pointer',fontWeight:600}}>About</div>
           <div onClick={()=>{setMenu(false);setPage('blog')}} style={{padding:'18px 0',borderBottom:'1px solid #f1f5f9',cursor:'pointer',fontWeight:600}}>Blog</div>
-          <div onClick={()=>{setMenu(false);document.getElementById('support')?.scrollIntoView({behavior:'smooth'})}} style={{padding:'18px 0',cursor:'pointer'}}>Support</div>
+          <div onClick={()=>{setMenu(false);document.getElementById('support')?.scrollIntoView({behavior:'smooth'})}} style={{padding:'18px 0',borderBottom:'1px solid #f1f5f9',cursor:'pointer'}}>Support</div>
+          {/* ONLY NEW THING - BACK BUTTON INSIDE DROPDOWN */}
+          <div onClick={()=>setMenu(false)} style={{padding:'18px 0',cursor:'pointer',fontWeight:700,color:green}}>← Back to Home</div>
         </div>
       )}
 
