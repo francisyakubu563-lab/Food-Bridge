@@ -17,6 +17,45 @@ export default function App(){
     setTimeout(()=>{setSent(false); setForm({name:'',email:'',phone:'',subject:'Transportation',message:''})},3000);
   };
 
+  if(page==='solutions'){
+    return(
+      <div style={{fontFamily:'Inter,sans-serif',background:'white',minHeight:'100vh'}}>
+        <header style={{display:'flex',justifyContent:'space-between',padding:'12px 16px',borderBottom:'1px solid #eee',position:'sticky',top:0,background:'white',zIndex:99}}>
+          <div onClick={()=>{setPage('home'); setMenu(true);}} style={{fontWeight:900,color:green,cursor:'pointer',display:'flex',gap:8,alignItems:'center'}}><div style={{width:32,height:32,background:green,color:'white',borderRadius:8,display:'flex',alignItems:'center',justifyContent:'center'}}>F</div>FoodBridge</div>
+          <button onClick={()=>{setPage('home'); setMenu(true);}} style={{border:'1px solid #ddd',background:'white',padding:'8px 14px',borderRadius:8}}>← Back</button>
+        </header>
+        <div style={{padding:'20px 16px',background:'#F5F1E8'}}>
+          <p style={{color:green,fontWeight:800,fontSize:11,letterSpacing:1}}>OUR SOLUTIONS</p>
+          <h1 style={{fontSize:26,fontWeight:900,marginTop:8}}>Professional Food Logistics for Every Need</h1>
+          <p style={{fontSize:14,color:'#64748b',marginTop:8}}>FoodBridge solutions built for families, students, businesses and communities across Nigeria.</p>
+
+          <div style={{marginTop:20,display:'grid',gap:14}}>
+            {[
+              {t:'Personal & Family Food Delivery', d:'Send foodstuff to loved ones anywhere in Nigeria. Pack garri, rice, beans, soup, yam, palm oil etc. Drop at FoodBridge branch, provide recipient details. We transport safely to destination branch for pickup. Ideal for parents sending to children, families supporting each other.', i:'👨‍👩‍👧‍👦'},
+              {t:'Student Food Support', d:'Special service for students. Parents with Family/Personal Account send foodstuff to Student Account. Fast, affordable, reliable delivery to branches near universities and schools. Because a box of food is home in a package.', i:'🎓'},
+              {t:'Business & Organization Logistics', d:'For companies, restaurants, supermarkets, schools, hotels, NGOs. Transport foodstuff to branches, clients, employees, customers, distributors. Bulk handling, tracked delivery, professional receipts and account management.', i:'🏢'},
+              {t:'Secure Food Storage', d:'Short-term and long-term storage for individuals, families, companies, suppliers. Safe, organized space when you need extra capacity. Bring foodstuff → Select Storage → Agree duration → Collect when needed. Extension of your own storage.', i:'📦'},
+              {t:'Buy & Sell Marketplace', d:'Buy foodstuff in small, medium, large, bulk quantities at FoodBridge. Farmers, suppliers, traders can also sell their produce to us subject to quality and pricing. We buy, store, and transport. One place for all food needs.', i:'🛒'},
+              {t:'Bulk & Inter-State Transport', d:'Move large quantities across states. From village to city, city to city. Cost-effective, reliable, designed for Nigerian roads and needs. Whether 1 bag or 100 bags, we bridge the gap.', i:'🚚'},
+            ].map((s,i)=>(
+              <div key={i} style={{background:'white',borderRadius:14,padding:16,border:'1px solid #e7e0d0'}}>
+                <div style={{fontSize:22}}>{s.i}</div>
+                <b style={{color:green,marginTop:6,display:'block'}}>{s.t}</b>
+                <p style={{fontSize:13,color:'#334155',marginTop:8,lineHeight:1.6}}>{s.d}</p>
+              </div>
+            ))}
+          </div>
+
+          <div style={{marginTop:16,background:'#111827',color:'white',borderRadius:14,padding:18}}>
+            <b>Why FoodBridge Solutions?</b>
+            <p style={{fontSize:13,color:'#cbd5e1',marginTop:8,lineHeight:1.6}}>✓ Affordable pricing<br/>✓ Safe handling of food<br/>✓ Designated deposit & pickup branches<br/>✓ Account types for every user (Personal, Family, Student, Company)<br/>✓ Tracking and SMS updates<br/>✓ Based in Gwagwalada, Abuja - serving Nigeria</p>
+            <p style={{marginTop:12,fontWeight:800,color:'#22c55e'}}>Your Food. Your Destination. Your Choice.</p>
+          </div>
+        </div>
+      </div>
+    )
+  }
+
   if(page==='support'){
     return(
       <div style={{fontFamily:'Inter,sans-serif',background:'white',minHeight:'100vh'}}>
@@ -24,13 +63,10 @@ export default function App(){
           <div onClick={()=>{setPage('home'); setMenu(true);}} style={{fontWeight:900,color:green,cursor:'pointer',display:'flex',gap:8,alignItems:'center'}}><div style={{width:32,height:32,background:green,color:'white',borderRadius:8,display:'flex',alignItems:'center',justifyContent:'center'}}>F</div>FoodBridge</div>
           <button onClick={()=>{setPage('home'); setMenu(true);}} style={{border:'1px solid #ddd',background:'white',padding:'8px 14px',borderRadius:8}}>← Back</button>
         </header>
-
         <div style={{padding:'20px 16px',background:'#F5F1E8'}}>
           <p style={{color:green,fontWeight:800,fontSize:11,letterSpacing:1}}>SUPPORT CENTER</p>
           <h1 style={{fontSize:26,fontWeight:900,marginTop:8}}>How can we help you?</h1>
           <p style={{fontSize:14,color:'#64748b',marginTop:8}}>Get answers, contact us, and learn how FoodBridge works.</p>
-
-          {/* HELP SECTION - FUNCTIONAL */}
           <div style={{marginTop:20,background:'white',borderRadius:14,padding:18,border:'1px solid #e7e0d0'}}>
             <h2 style={{fontWeight:800,color:green}}>Quick Help Guides</h2>
             <div style={{marginTop:12,display:'grid',gap:10}}>
@@ -46,8 +82,6 @@ export default function App(){
               ))}
             </div>
           </div>
-
-          {/* FAQ WITH ANSWERS - FUNCTIONAL ACCORDION */}
           <div style={{marginTop:16,background:'white',borderRadius:14,padding:18,border:'1px solid #e7e0d0'}}>
             <h2 style={{fontWeight:800,color:green}}>Frequently Asked Questions</h2>
             <div style={{marginTop:12,display:'grid',gap:10}}>
@@ -68,8 +102,6 @@ export default function App(){
               ))}
             </div>
           </div>
-
-          {/* CONTACT FORM - FUNCTIONAL */}
           <div style={{marginTop:16,background:'white',borderRadius:14,padding:18,border:'1px solid #e7e0d0'}}>
             <h2 style={{fontWeight:800,color:green}}>Contact Us</h2>
             <p style={{fontSize:13,color:'#64748b',marginTop:4}}>Fill form – we will respond within 24hrs</p>
@@ -91,11 +123,7 @@ export default function App(){
               {sent && <div style={{background:'#dcfce7',color:green,padding:10,borderRadius:8,fontSize:13,textAlign:'center',fontWeight:700}}>Thank you! We received your message. We will contact you soon at {form.email}</div>}
             </form>
             <div style={{marginTop:16,background:'#111827',color:'white',borderRadius:10,padding:12,fontSize:13,lineHeight:1.8}}>
-              <b>Direct Contact</b><br/>
-              Email: foodbridge.nigeria@gmail.com<br/>
-              Phone: 0816-383-1822<br/>
-              Location: Gwagwalada, Abuja<br/>
-              Founder: Francis Yakubu
+              <b>Direct Contact</b><br/>Email: foodbridge.nigeria@gmail.com<br/>Phone: 0816-383-1822<br/>Location: Gwagwalada, Abuja<br/>Founder: Francis Yakubu
             </div>
           </div>
         </div>
@@ -250,8 +278,17 @@ export default function App(){
 
       {menu && (
         <div style={{background:'white',borderBottom:'1px solid #eee',padding:'0 16px',position:'sticky',top:57,zIndex:90}}>
-          <div onClick={()=>setSol(!sol)} style={{padding:'18px 0',borderBottom:'1px solid #f1f5f9',fontWeight:600,cursor:'pointer',display:'flex',justifyContent:'space-between'}}><span>Solutions</span><span>▾</span></div>
-          {sol && <div style={{padding:'0 0 12px 12px',fontSize:14,lineHeight:2.2,color:'#444'}}><div>Food Donation Management</div><div>Waste Tracking and Analytics</div><div>Volunteer Connect</div><div>Community Sharing</div></div>}
+          {/* PROFESSIONAL FOODBIDGE SOLUTIONS - NOT SELLSYNC */}
+          <div onClick={()=>setSol(!sol)} style={{padding:'18px 0',borderBottom:'1px solid #f1f5f9',fontWeight:600,cursor:'pointer',display:'flex',justifyContent:'space-between'}}><span>Solutions</span><span>{sol?'▴':'▾'}</span></div>
+          {sol && <div style={{padding:'0 0 12px 0',display:'grid',gap:8}}>
+            <div onClick={()=>{setMenu(false);setPage('solutions')}} style={{background:'#F5F1E8',borderRadius:10,padding:12,cursor:'pointer'}}><b style={{fontSize:13,color:green}}>👨‍👩‍👧‍👦 Personal & Family Delivery</b><p style={{fontSize:11,color:'#64748b',marginTop:4}}>Send foodstuff to loved ones across Nigeria</p></div>
+            <div onClick={()=>{setMenu(false);setPage('solutions')}} style={{background:'#F5F1E8',borderRadius:10,padding:12,cursor:'pointer'}}><b style={{fontSize:13,color:green}}>🎓 Student Food Support</b><p style={{fontSize:11,color:'#64748b',marginTop:4}}>For parents sending food to students in school</p></div>
+            <div onClick={()=>{setMenu(false);setPage('solutions')}} style={{background:'#F5F1E8',borderRadius:10,padding:12,cursor:'pointer'}}><b style={{fontSize:13,color:green}}>🏢 Business & Organization Logistics</b><p style={{fontSize:11,color:'#64748b',marginTop:4}}>For companies, schools, restaurants, NGOs</p></div>
+            <div onClick={()=>{setMenu(false);setPage('solutions')}} style={{background:'#F5F1E8',borderRadius:10,padding:12,cursor:'pointer'}}><b style={{fontSize:13,color:green}}>📦 Secure Food Storage</b><p style={{fontSize:11,color:'#64748b',marginTop:4}}>Short & long-term storage solutions</p></div>
+            <div onClick={()=>{setMenu(false);setPage('solutions')}} style={{background:'#F5F1E8',borderRadius:10,padding:12,cursor:'pointer'}}><b style={{fontSize:13,color:green}}>🛒 Buy & Sell Marketplace</b><p style={{fontSize:11,color:'#64748b',marginTop:4}}>Buy in small/bulk, sell your farm produce</p></div>
+            <div onClick={()=>{setMenu(false);setPage('solutions')}} style={{background:'#F5F1E8',borderRadius:10,padding:12,cursor:'pointer'}}><b style={{fontSize:13,color:green}}>🚚 Bulk & Inter-State Transport</b><p style={{fontSize:11,color:'#64748b',marginTop:4}}>Move large quantities across Nigeria</p></div>
+            <div onClick={()=>{setMenu(false);setPage('solutions')}} style={{textAlign:'center',padding:'8px',color:green,fontWeight:700,fontSize:12,cursor:'pointer'}}>View All Solutions →</div>
+          </div>}
           <div onClick={()=>{setMenu(false);setPage('about')}} style={{padding:'18px 0',borderBottom:'1px solid #f1f5f9',cursor:'pointer',fontWeight:600}}>About</div>
           <div onClick={()=>{setMenu(false);setPage('blog')}} style={{padding:'18px 0',borderBottom:'1px solid #f1f5f9',cursor:'pointer',fontWeight:600}}>Blog</div>
           <div onClick={()=>{setMenu(false);setPage('support')}} style={{padding:'18px 0',borderBottom:'1px solid #f1f5f9',cursor:'pointer',fontWeight:600}}>Support</div>
