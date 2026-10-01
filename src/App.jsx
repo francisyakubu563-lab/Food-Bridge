@@ -29,20 +29,12 @@ export default function App(){
           <h1 style={{fontSize:26,fontWeight:900,marginTop:8}}>Professional Food Logistics for Every Need</h1>
           <p style={{fontSize:14,color:'#64748b',marginTop:8}}>FoodBridge solutions built for families, students, businesses and communities across Nigeria.</p>
           <div style={{marginTop:20,display:'grid',gap:14}}>
-            {[
-              {t:'Personal & Family Food Delivery', d:'Send foodstuff to loved ones anywhere in Nigeria. Pack garri, rice, beans, soup, yam, palm oil etc. Drop at FoodBridge branch, provide recipient details. We transport safely to destination branch for pickup. Ideal for parents sending to children, families supporting each other.', i:'👨‍👩‍👧‍👦'},
-              {t:'Student Food Support', d:'Special service for students. Parents with Family/Personal Account send foodstuff to Student Account. Fast, affordable, reliable delivery to branches near universities and schools. Because a box of food is home in a package.', i:'🎓'},
-              {t:'Business & Organization Logistics', d:'For companies, restaurants, supermarkets, schools, hotels, NGOs. Transport foodstuff to branches, clients, employees, customers, distributors. Bulk handling, tracked delivery, professional receipts and account management.', i:'🏢'},
-              {t:'Secure Food Storage', d:'Short-term and long-term storage for individuals, families, companies, suppliers. Safe, organized space when you need extra capacity. Bring foodstuff → Select Storage → Agree duration → Collect when needed. Extension of your own storage.', i:'📦'},
-              {t:'Buy & Sell Marketplace', d:'Buy foodstuff in small, medium, large, bulk quantities at FoodBridge. Farmers, suppliers, traders can also sell their produce to us subject to quality and pricing. We buy, store, and transport. One place for all food needs.', i:'🛒'},
-              {t:'Bulk & Inter-State Transport', d:'Move large quantities across states. From village to city, city to city. Cost-effective, reliable, designed for Nigerian roads and needs. Whether 1 bag or 100 bags, we bridge the gap.', i:'🚚'},
-            ].map((s,i)=>(
-              <div key={i} style={{background:'white',borderRadius:14,padding:16,border:'1px solid #e7e0d0'}}>
-                <div style={{fontSize:22}}>{s.i}</div>
-                <b style={{color:green,marginTop:6,display:'block'}}>{s.t}</b>
-                <p style={{fontSize:13,color:'#334155',marginTop:8,lineHeight:1.6}}>{s.d}</p>
-              </div>
-            ))}
+            <div style={{background:'white',borderRadius:14,padding:16,border:'1px solid #e7e0d0'}}><div style={{fontSize:22}}>👨‍👩‍👧‍👦</div><b style={{color:green,marginTop:6,display:'block'}}>Personal & Family Food Delivery</b><p style={{fontSize:13,color:'#334155',marginTop:8,lineHeight:1.6}}>Send foodstuff to loved ones anywhere in Nigeria. Pack garri, rice, beans, soup, yam, palm oil etc. Drop at FoodBridge branch, provide recipient details. We transport safely to destination branch for pickup. Ideal for parents sending to children, families supporting each other.</p></div>
+            <div style={{background:'white',borderRadius:14,padding:16,border:'1px solid #e7e0d0'}}><div style={{fontSize:22}}>🎓</div><b style={{color:green,marginTop:6,display:'block'}}>Student Food Support</b><p style={{fontSize:13,color:'#334155',marginTop:8,lineHeight:1.6}}>Special service for students. Parents with Family/Personal Account send foodstuff to Student Account. Fast, affordable, reliable delivery to branches near universities and schools. Because a box of food is home in a package.</p></div>
+            <div style={{background:'white',borderRadius:14,padding:16,border:'1px solid #e7e0d0'}}><div style={{fontSize:22}}>🏢</div><b style={{color:green,marginTop:6,display:'block'}}>Business & Organization Logistics</b><p style={{fontSize:13,color:'#334155',marginTop:8,lineHeight:1.6}}>For companies, restaurants, supermarkets, schools, hotels, NGOs. Transport foodstuff to branches, clients, employees, customers, distributors. Bulk handling, tracked delivery, professional receipts and account management.</p></div>
+            <div style={{background:'white',borderRadius:14,padding:16,border:'1px solid #e7e0d0'}}><div style={{fontSize:22}}>📦</div><b style={{color:green,marginTop:6,display:'block'}}>Secure Food Storage</b><p style={{fontSize:13,color:'#334155',marginTop:8,lineHeight:1.6}}>Short-term and long-term storage for individuals, families, companies, suppliers. Safe, organized space when you need extra capacity. Bring foodstuff → Select Storage → Agree duration → Collect when needed. Extension of your own storage.</p></div>
+            <div style={{background:'white',borderRadius:14,padding:16,border:'1px solid #e7e0d0'}}><div style={{fontSize:22}}>🛒</div><b style={{color:green,marginTop:6,display:'block'}}>Buy & Sell Marketplace</b><p style={{fontSize:13,color:'#334155',marginTop:8,lineHeight:1.6}}>Buy foodstuff in small, medium, large, bulk quantities at FoodBridge. Farmers, suppliers, traders can also sell their produce to us subject to quality and pricing. We buy, store, and transport. One place for all food needs.</p></div>
+            <div style={{background:'white',borderRadius:14,padding:16,border:'1px solid #e7e0d0'}}><div style={{fontSize:22}}>🚚</div><b style={{color:green,marginTop:6,display:'block'}}>Bulk & Inter-State Transport</b><p style={{fontSize:13,color:'#334155',marginTop:8,lineHeight:1.6}}>Move large quantities across states. From village to city, city to city. Cost-effective, reliable, designed for Nigerian roads and needs. Whether 1 bag or 100 bags, we bridge the gap.</p></div>
           </div>
         </div>
       </div>
@@ -129,14 +121,17 @@ export default function App(){
           <div style={{marginTop:18,background:'white',borderRadius:14,padding:18,border:'1px solid #e7e0d0',fontSize:14,lineHeight:1.7,color:'#334155'}}>
             <p>Food is more than something we eat. In Nigeria, food represents family, care, culture, community, and connection.</p>
             <p style={{marginTop:12}}>A mother preparing a carefully packed meal for her child in university. A family sending foodstuff to a loved one living in another state. A restaurant moving supplies from one location to another. A business looking for a safe place to preserve its food products. These everyday situations all have one thing in common: food needs to move from where it is available to where it is needed.</p>
+            <p style={{marginTop:12}}>Yet, moving and storing food in Nigeria can sometimes be challenging. Distance, transportation costs, delays, poor handling, limited storage facilities, and concerns about food preservation can make a simple task unnecessarily stressful.</p>
             <p style={{marginTop:12}}><b>This is where FoodBridge comes in.</b></p>
             <h3 style={{marginTop:20,fontWeight:800,color:'#111'}}>Bridging the Gap Between Food and the People Who Need It</h3>
             <p style={{marginTop:8}}>FoodBridge is a Nigerian food logistics and storage company created with a simple but powerful purpose: to make the movement and preservation of food easier, faster, safer, and more affordable.</p>
             <h3 style={{marginTop:20,fontWeight:800,color:'#111'}}>When Food Becomes a Message of Love</h3>
-            <p style={{marginTop:8}}>For many Nigerian families, sending food to a loved one is an expression of care.</p>
+            <p style={{marginTop:8}}>For many Nigerian families, sending food to a loved one is an expression of care. A parent may prepare garri, rice, beans, soup, yam, palm oil, dried food, snacks, or other essentials and send them to a child studying far from home.</p>
             <p style={{marginTop:8}}><b>FoodBridge is designed to make this process simpler.</b></p>
             <h3 style={{marginTop:20,fontWeight:800,color:'#111'}}>Supporting Students and Families</h3>
             <p style={{marginTop:8}}><i>Because sometimes, a box of food is more than a delivery. It is home in a package.</i></p>
+            <h3 style={{marginTop:20,fontWeight:800,color:'#111'}}>Affordability Matters</h3>
+            <p style={{marginTop:8}}>A logistics service is only useful when people can realistically afford it. At FoodBridge, affordability is part of our mission.</p>
             <div style={{marginTop:20,background:'#111827',color:'white',borderRadius:12,padding:16}}>
               <b>Our Promise</b>
               <p style={{marginTop:8,color:'#cbd5e1'}}>At FoodBridge, we believe that logistics should be about more than transportation. It should be about connection.</p>
@@ -162,22 +157,13 @@ export default function App(){
           <div style={{marginTop:20,background:'white',borderRadius:14,padding:18,border:'1px solid #e7e0d0'}}>
             <b>COMPANY DESCRIPTION</b>
             <p style={{fontSize:14,lineHeight:1.6,marginTop:8,color:'#334155'}}>FoodBridge is a Nigerian food logistics and storage company created to make it easier, faster, safer, and more affordable to move and preserve foodstuff.</p>
+            <p style={{fontSize:14,lineHeight:1.6,marginTop:10,color:'#334155'}}>At FoodBridge, we make it easier, safer, faster, and more affordable to transport, store, buy, and sell foodstuff across Nigeria. Whether you are an individual, student, family, company, organization, school, supplier, or large-scale business, FoodBridge provides flexible solutions.</p>
           </div>
           <div style={{marginTop:14,background:'white',borderRadius:14,padding:18,border:'1px solid #e7e0d0'}}>
             <h2 style={{fontSize:20,fontWeight:900,color:green}}>How FoodBridge Works</h2>
-            <p style={{fontSize:14,lineHeight:1.6,marginTop:10,color:'#334155'}}>At FoodBridge, we make it easier, safer, faster, and more affordable to transport, store, buy, and sell foodstuff across Nigeria. Whether you are an individual, student, family, company, organization, school, supplier, or large-scale business, FoodBridge provides flexible solutions.</p>
-            <div style={{marginTop:15,background:'#F5F1E8',borderRadius:12,padding:14}}>
-              <b style={{color:green}}>1. Foodstuff Transportation & Delivery</b>
-              <p style={{fontSize:13,lineHeight:1.6,marginTop:8,color:'#334155'}}>Personal Account, Family Account, Student Account, Company/Organization Account. Deposit → Register → Provide details → Transport → Pickup.</p>
-            </div>
-            <div style={{marginTop:15,background:'#F5F1E8',borderRadius:12,padding:14}}>
-              <b style={{color:green}}>2. Foodstuff Storage</b>
-              <p style={{fontSize:13,lineHeight:1.6,marginTop:8,color:'#334155'}}>Short-term and long-term storage. Bring your foodstuff → Select Storage → Agree duration → Collect when needed.</p>
-            </div>
-            <div style={{marginTop:15,background:'#F5F1E8',borderRadius:12,padding:14}}>
-              <b style={{color:green}}>3. Buying & Selling Foodstuff</b>
-              <p style={{fontSize:13,lineHeight:1.6,marginTop:8,color:'#334155'}}>Buy in small, medium, large, bulk. Sell your farm produce. Bring foodstuff → Tell us Sell, Store, or Transport.</p>
-            </div>
+            <div style={{marginTop:15,background:'#F5F1E8',borderRadius:12,padding:14}}><b style={{color:green}}>1. Foodstuff Transportation & Delivery</b><p style={{fontSize:13,lineHeight:1.6,marginTop:8,color:'#334155'}}>FoodBridge helps individuals, families, students, companies, organizations, and businesses transport foodstuff from one location to another. We have Personal Account, Family Account, Student Account, Company/Organization Account. Deposit → Register → Provide details → Transport → Pickup.</p></div>
+            <div style={{marginTop:15,background:'#F5F1E8',borderRadius:12,padding:14}}><b style={{color:green}}>2. Foodstuff Storage</b><p style={{fontSize:13,lineHeight:1.6,marginTop:8,color:'#334155'}}>Short-term and long-term storage for individuals, families, companies, suppliers, farmers, and traders. Safe, organized space when you need extra capacity. Bring your foodstuff → Select Storage → Agree duration → Collect when needed. Extension of your own storage.</p></div>
+            <div style={{marginTop:15,background:'#F5F1E8',borderRadius:12,padding:14}}><b style={{color:green}}>3. Buying & Selling Foodstuff</b><p style={{fontSize:13,lineHeight:1.6,marginTop:8,color:'#334155'}}>Buy foodstuff in small, medium, large, bulk quantities at FoodBridge. Farmers, suppliers, traders, individuals can also bring foodstuff to sell to us subject to quality and pricing requirements. Bring foodstuff → Tell us Sell, Store, or Transport → FoodBridge processes it.</p></div>
           </div>
         </div>
       </div>
@@ -213,14 +199,34 @@ export default function App(){
       {menu && (
         <div style={{background:'white',borderBottom:'1px solid #eee',padding:'0 16px',position:'sticky',top:57,zIndex:90}}>
           <div onClick={()=>setSol(!sol)} style={{padding:'18px 0',borderBottom:'1px solid #f1f5f9',fontWeight:600,cursor:'pointer',display:'flex',justifyContent:'space-between'}}><span>Solutions</span><span>{sol?'▴':'▾'}</span></div>
-          {sol && <div style={{padding:'0 0 12px 0',display:'grid',gap:8}}>
-            <div onClick={()=>{setMenu(false);setPage('solutions')}} style={{background:'#F5F1E8',borderRadius:10,padding:12,cursor:'pointer'}}><b style={{fontSize:13,color:green}}>👨‍👩‍👧‍👦 Personal & Family Delivery</b><p style={{fontSize:11,color:'#64748b',marginTop:4}}>Send foodstuff to loved ones</p></div>
-            <div onClick={()=>{setMenu(false);setPage('solutions')}} style={{background:'#F5F1E8',borderRadius:10,padding:12,cursor:'pointer'}}><b style={{fontSize:13,color:green}}>🎓 Student Food Support</b><p style={{fontSize:11,color:'#64748b',marginTop:4}}>Parents sending to students</p></div>
-            <div onClick={()=>{setMenu(false);setPage('solutions')}} style={{background:'#F5F1E8',borderRadius:10,padding:12,cursor:'pointer'}}><b style={{fontSize:13,color:green}}>🏢 Business Logistics</b><p style={{fontSize:11,color:'#64748b',marginTop:4}}>Companies, schools, NGOs</p></div>
-            <div onClick={()=>{setMenu(false);setPage('solutions')}} style={{background:'#F5F1E8',borderRadius:10,padding:12,cursor:'pointer'}}><b style={{fontSize:13,color:green}}>📦 Secure Storage</b><p style={{fontSize:11,color:'#64748b',marginTop:4}}>Short & long-term</p></div>
-            <div onClick={()=>{setMenu(false);setPage('solutions')}} style={{background:'#F5F1E8',borderRadius:10,padding:12,cursor:'pointer'}}><b style={{fontSize:13,color:green}}>🛒 Buy & Sell Marketplace</b><p style={{fontSize:11,color:'#64748b',marginTop:4}}>Small/bulk, sell produce</p></div>
-            <div onClick={()=>{setMenu(false);setPage('solutions')}} style={{background:'#F5F1E8',borderRadius:10,padding:12,cursor:'pointer'}}><b style={{fontSize:13,color:green}}>🚚 Bulk & Inter-State</b><p style={{fontSize:11,color:'#64748b',marginTop:4}}>Large quantities</p></div>
-          </div>}
+          {sol && (
+            <div style={{padding:'0 0 12px 0',display:'grid',gap:8}}>
+              <div onClick={()=>{setMenu(false);setPage('solutions')}} style={{background:'#F5F1E8',borderRadius:10,padding:12,cursor:'pointer'}}>
+                <b style={{fontSize:13,color:green}}>👨‍👩‍👧‍👦 Personal & Family Food Delivery</b>
+                <p style={{fontSize:11,color:'#64748b',marginTop:4}}>Send foodstuff to loved ones anywhere in Nigeria</p>
+              </div>
+              <div onClick={()=>{setMenu(false);setPage('solutions')}} style={{background:'#F5F1E8',borderRadius:10,padding:12,cursor:'pointer'}}>
+                <b style={{fontSize:13,color:green}}>🎓 Student Food Support</b>
+                <p style={{fontSize:11,color:'#64748b',marginTop:4}}>For parents sending food to students in school</p>
+              </div>
+              <div onClick={()=>{setMenu(false);setPage('solutions')}} style={{background:'#F5F1E8',borderRadius:10,padding:12,cursor:'pointer'}}>
+                <b style={{fontSize:13,color:green}}>🏢 Business & Organization Logistics</b>
+                <p style={{fontSize:11,color:'#64748b',marginTop:4}}>For companies, restaurants, schools, hotels, NGOs</p>
+              </div>
+              <div onClick={()=>{setMenu(false);setPage('solutions')}} style={{background:'#F5F1E8',borderRadius:10,padding:12,cursor:'pointer'}}>
+                <b style={{fontSize:13,color:green}}>📦 Secure Food Storage</b>
+                <p style={{fontSize:11,color:'#64748b',marginTop:4}}>Short & long-term storage solutions</p>
+              </div>
+              <div onClick={()=>{setMenu(false);setPage('solutions')}} style={{background:'#F5F1E8',borderRadius:10,padding:12,cursor:'pointer'}}>
+                <b style={{fontSize:13,color:green}}>🛒 Buy & Sell Marketplace</b>
+                <p style={{fontSize:11,color:'#64748b',marginTop:4}}>Buy in small/bulk, sell your farm produce</p>
+              </div>
+              <div onClick={()=>{setMenu(false);setPage('solutions')}} style={{background:'#F5F1E8',borderRadius:10,padding:12,cursor:'pointer'}}>
+                <b style={{fontSize:13,color:green}}>🚚 Bulk & Inter-State Transport</b>
+                <p style={{fontSize:11,color:'#64748b',marginTop:4}}>Move large quantities across Nigeria</p>
+              </div>
+            </div>
+          )}
           <div onClick={()=>{setMenu(false);setPage('about')}} style={{padding:'18px 0',borderBottom:'1px solid #f1f5f9',cursor:'pointer',fontWeight:600}}>About</div>
           <div onClick={()=>{setMenu(false);setPage('blog')}} style={{padding:'18px 0',borderBottom:'1px solid #f1f5f9',cursor:'pointer',fontWeight:600}}>Blog</div>
           <div onClick={()=>{setMenu(false);setPage('support')}} style={{padding:'18px 0',borderBottom:'1px solid #f1f5f9',cursor:'pointer',fontWeight:600}}>Support</div>
@@ -250,17 +256,15 @@ export default function App(){
         <h2 style={{fontSize:22,fontWeight:800,textAlign:'center'}}>One FoodBridge, Multiple Solutions</h2>
         <p style={{textAlign:'center',fontSize:13,color:'#64748b',marginTop:8}}>FoodBridge — Connecting Food, People & Places</p>
         <div style={{display:'grid',gap:12,marginTop:20}}>
-          <div style={{background:'#F5F1E8',border:'1px solid #e7e0d0',borderRadius:12,padding:16}}><b>🚚 Transportation & Delivery</b><p style={{fontSize:13,color:'#475569',marginTop:6}}>Deposit foodstuff, provide sender & recipient details, we transport to designated pickup location.</p></div>
-          <div style={{background:'#F5F1E8',border:'1px solid #e7e0d0',borderRadius:12,padding:16}}><b>📦 Secure Storage</b><p style={{fontSize:13,color:'#475569',marginTop:6}}>Short & long-term storage. Bring foodstuff → Select Storage → Agree duration → Collect when needed.</p></div>
-          <div style={{background:'#F5F1E8',border:'1px solid #e7e0d0',borderRadius:12,padding:16}}><b>🛒 Buy & Sell Marketplace</b><p style={{fontSize:13,color:'#475569',marginTop:6}}>Buy in small, medium, large & bulk quantities. Sell your farm produce to FoodBridge.</p></div>
+          <div style={{background:'#F5F1E8',border:'1px solid #e7e0d0',borderRadius:12,padding:16}}><b>🚚 Transportation & Delivery</b><p style={{fontSize:13,color:'#475569',marginTop:6}}>Deposit foodstuff, provide sender & recipient details, we transport to designated pickup location. Personal, Family, Student, Company accounts.</p></div>
+          <div style={{background:'#F5F1E8',border:'1px solid #e7e0d0',borderRadius:12,padding:16}}><b>📦 Secure Storage</b><p style={{fontSize:13,color:'#475569',marginTop:6}}>Short & long-term storage. Bring foodstuff → Select Storage → Agree duration → Collect when needed. Extension of your own storage.</p></div>
+          <div style={{background:'#F5F1E8',border:'1px solid #e7e0d0',borderRadius:12,padding:16}}><b>🛒 Buy & Sell Marketplace</b><p style={{fontSize:13,color:'#475569',marginTop:6}}>Buy in small, medium, large & bulk quantities. Sell your farm produce to FoodBridge. One place for all food needs.</p></div>
         </div>
       </div>
 
       <div id="contact" style={{padding:'35px 16px',background:'#F5F1E8'}}>
         <h2 style={{fontWeight:800,textAlign:'center'}}>Contact Us</h2>
-        <div style={{marginTop:18,background:'white',padding:14,borderRadius:10,fontSize:13,lineHeight:1.8,border:'1px solid #e7e0d0'}}>
-          Email: foodbridge.nigeria@gmail.com<br/>Phone: 0816-383-1822<br/>Location: Gwagwalada, Abuja<br/>Founder: Francis Yakubu
-        </div>
+        <div style={{marginTop:18,background:'white',padding:14,borderRadius:10,fontSize:13,lineHeight:1.8,border:'1px solid #e7e0d0'}}>Email: foodbridge.nigeria@gmail.com<br/>Phone: 0816-383-1822<br/>Location: Gwagwalada, Abuja<br/>Founder: Francis Yakubu</div>
       </div>
 
       <footer style={{background:'white',padding:'25px 16px',borderTop:'1px solid #eee'}}>
