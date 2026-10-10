@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useRef } from 'react';
 
 export default function App(){
   const [menu,setMenu]=useState(false);
@@ -10,7 +10,31 @@ export default function App(){
   const [sent,setSent]=useState(false);
   const green='#166534';
 
-  const [regForm,setRegForm]=useState({firstName:'',lastName:'',email:'',password:'',confirmPassword:'',accountType:'Personal',serviceType:'Transportation'});
+  const [regForm,setRegForm]=useState({firstName:'',lastName:'',email:'',password:'',confirmPassword:'',accountType:'',serviceType:''});
+  const [showAccDrop,setShowAccDrop]=useState(false);
+  const [showServiceDrop,setShowServiceDrop]=useState(false);
+  const [showPass,setShowPass]=useState(false);
+  const [showConfirmPass,setShowConfirmPass]=useState(false);
+  const [faceImage,setFaceImage]=useState(null);
+  const [faceVerified,setFaceVerified]=useState(false);
+  const [cameraOn,setCameraOn]=useState(false);
+  const [livenessMsg,setLivenessMsg]=useState('Click Start Camera');
+  const [otpCode,setOtpCode]=useState('');
+  const videoRef=useRef(null);
+  const canvasRef=useRef(null);
+
+  const accountOptions=[
+    {id:'Personal', label:'Personal Account', desc:'Individual sending/receiving foodstuff'},
+    {id:'Family', label:'Family Account', desc:'Family sending to relatives & loved ones'},
+    {id:'Student', label:'Student Account', desc:'Student receiving from parents/guardians'},
+    {id:'Company/Organization', label:'Company / Organization', desc:'Business, School, NGO, Restaurant, Hotel'},
+  ];
+  const serviceOptions=[
+    {id:'Transportation', label:'Transportation & Delivery', desc:'Send foodstuff to destination'},
+    {id:'Storage', label:'Secure Food Storage', desc:'Short & long-term storage'},
+    {id:'Buying', label:'Buying Foodstuff', desc:'Buy small, medium, large, bulk'},
+    {id:'Selling', label:'Selling / Supplying to FoodBridge', desc:'Sell farm produce / supply food'},
+  ];
 
   const handleSubmit=(e)=>{
     e.preventDefault();
@@ -21,13 +45,39 @@ export default function App(){
 
   const handleRegister=(e)=>{
     e.preventDefault();
-    if(!regForm.firstName || !regForm.lastName || !regForm.email || !regForm.password){
-      alert('Please fill all fields'); return;
+    if(!regForm.firstName || !regForm.lastName || !regForm.email || !regForm.password || !regForm.accountType || !regForm.serviceType){
+      alert('Please fill all fields including Account Type'); return;
     }
     if(regForm.password !== regForm.confirmPassword){
-      alert('Passwords do not match - please rewrite to confirm'); return;
+      alert('Passwords do not match'); return;
     }
     setPage('faceVerify');
+    setLivenessMsg('Ready to verify your face');
+    setFaceVerified(false);
+    setFaceImage(null);
+  };
+
+  const startCamera=async()=>{
+    try{
+      setCameraOn(true);
+      setLivenessMsg('Starting camera... please allow permission');
+      const stream=await navigator.mediaDevices.getUserMedia({video:{facingMode:'user'}});
+      if(videoRef.current){ videoRef.current.srcObject=stream; }
+      setTimeout(()=>setLivenessMsg('Good! Look straight - Blink 2 times'),1200);
+    }catch(err){ alert('Camera permission needed'); setCameraOn(false); }
+  };
+  const captureFace=()=>{
+    if(!videoRef.current) return;
+    const canvas=canvasRef.current; const video=videoRef.current;
+    canvas.width=video.videoWidth; canvas.height=video.videoHeight;
+    canvas.getContext('2d').drawImage(video,0,0);
+    setFaceImage(canvas.toDataURL('image/jpeg')); setFaceVerified(true);
+    setLivenessMsg('✅ Face Verified'); const stream=video.srcObject;
+    if(stream){ stream.getTracks().forEach(t=>t.stop()); } setCameraOn(false);
+  };
+  const proceedToOtp=()=>{
+    if(!faceVerified){alert('Verify face first'); return;}
+    alert(`OTP sent to ${regForm.email} (Demo: 123456)`); setPage('otpVerify');
   };
 
   if(page==='solutions'){
@@ -266,10 +316,7 @@ export default function App(){
           <input placeholder="Gmail Address" style={{width:'100%',padding:12,borderRadius:8,border:'1px solid #ddd',marginTop:15}}/>
           <input placeholder="Password" type="password" style={{width:'100%',padding:12,borderRadius:8,border:'1px solid #ddd',marginTop:10}}/>
           <button style={{width:'100%',background:green,color:'white',padding:12,borderRadius:8,border:'none',marginTop:15,fontWeight:700}}>Sign In</button>
-          <div style={{textAlign:'center',marginTop:16,fontSize:13}}>
-            <span style={{color:'#64748b'}}>Don't have an account? </span>
-            <span onClick={()=>setPage('register')} style={{color:green,fontWeight:800,cursor:'pointer',textDecoration:'underline'}}>Sign Up</span>
-          </div>
+          <div style={{textAlign:'center',marginTop:16,fontSize:13}}><span style={{color:'#64748b'}}>Don't have an account? </span><span onClick={()=>setPage('register')} style={{color:green,fontWeight:800,cursor:'pointer',textDecoration:'underline'}}>Sign Up</span></div>
           <p onClick={()=>{setPage('home'); setMenu(true);}} style={{textAlign:'center',marginTop:15,cursor:'pointer',fontSize:13}}>← Back to Home</p>
         </div>
       </div>
@@ -292,49 +339,57 @@ export default function App(){
             </div>
             <input value={regForm.email} onChange={e=>setRegForm({...regForm,email:e.target.value})} placeholder="Gmail Address *" type="email" style={{padding:12,borderRadius:8,border:'1px solid #ddd',fontSize:14}}/>
 
-            {/* ACCOUNT TYPE BOX - AS YOU ASKED - FROM HOW IT WORKS */}
-            <div style={{background:'#F5F1E8',borderRadius:12,padding:14,border:'1px solid #e7e0d0'}}>
-              <label style={{fontSize:12,fontWeight:800,color:green}}>WHO ARE YOU? - Select Account Type *</label>
-              <div style={{display:'grid',gridTemplateColumns:'1fr 1fr',gap:8,marginTop:8}}>
-                {[
-                  {id:'Personal', desc:'Individual sending/receiving'},
-                  {id:'Family', desc:'Family sending to loved ones'},
-                  {id:'Student', desc:'Student receiving from parents'},
-                  {id:'Company/Organization', desc:'Business, School, NGO, Restaurant'}
-                ].map(a=>(
-                  <div key={a.id} onClick={()=>setRegForm({...regForm,accountType:a.id})} style={{padding:10,borderRadius:8,border: regForm.accountType===a.id ? `2px solid ${green}` : '1px solid #ddd', background: regForm.accountType===a.id ? '#dcfce7' : 'white', cursor:'pointer'}}>
-                    <div style={{fontSize:12,fontWeight: regForm.accountType===a.id ? 800 : 600, color: regForm.accountType===a.id ? green : '#111'}}>{a.id}</div>
-                    <div style={{fontSize:10,color:'#64748b',marginTop:2}}>{a.desc}</div>
+            <div>
+              <label style={{fontSize:11,fontWeight:800,color:green,letterSpacing:0.5}}>WHO ARE YOU? *</label>
+              <div style={{position:'relative',marginTop:6}}>
+                <div onClick={()=>setShowAccDrop(!showAccDrop)} style={{padding:'12px 14px',borderRadius:8,border:'1px solid #ddd',background:'white',display:'flex',justifyContent:'space-between',alignItems:'center',cursor:'pointer',fontSize:14}}>
+                  <span style={{color: regForm.accountType ? '#111' : '#9ca3af'}}>{regForm.accountType ? accountOptions.find(o=>o.id===regForm.accountType)?.label : 'Select account type'}</span>
+                  <span style={{fontSize:12,color:green,transform: showAccDrop ? 'rotate(180deg)' : 'rotate(0)', transition:'0.2s'}}>▼</span>
+                </div>
+                {showAccDrop && (
+                  <div style={{position:'absolute',top:'100%',left:0,right:0,zIndex:20,background:'white',border:'1px solid #ddd',borderRadius:10,marginTop:6,boxShadow:'0 8px 20px rgba(0,0,0,0.1)',overflow:'hidden'}}>
+                    {accountOptions.map(o=>(
+                      <div key={o.id} onClick={()=>{setRegForm({...regForm,accountType:o.id}); setShowAccDrop(false);}} style={{padding:'12px 14px',cursor:'pointer',background: regForm.accountType===o.id ? '#dcfce7' : 'white', borderBottom:'1px solid #f3f4f6'}}>
+                        <div style={{fontSize:13,fontWeight:700,color: regForm.accountType===o.id ? green : '#111'}}>{o.label}</div>
+                        <div style={{fontSize:11,color:'#64748b',marginTop:2}}>{o.desc}</div>
+                      </div>
+                    ))}
                   </div>
-                ))}
+                )}
               </div>
-
-              <label style={{fontSize:12,fontWeight:800,color:green,marginTop:14,display:'block'}}>WHAT DO YOU WANT TO DO? - Service Category *</label>
-              <div style={{display:'grid',gridTemplateColumns:'1fr 1fr',gap:8,marginTop:8}}>
-                {[
-                  {id:'Transportation', label:'🚚 Transport', desc:'Send food to destination'},
-                  {id:'Storage', label:'📦 Storage', desc:'Store food safely'},
-                  {id:'Buying', label:'🛒 Buying', desc:'Buy food small/bulk'},
-                  {id:'Selling', label:'🌾 Selling / Supplying', desc:'Sell farm produce to us'}
-                ].map(s=>(
-                  <div key={s.id} onClick={()=>setRegForm({...regForm,serviceType:s.id})} style={{padding:10,borderRadius:8,border: regForm.serviceType===s.id ? `2px solid ${green}` : '1px solid #ddd', background: regForm.serviceType===s.id ? '#dcfce7' : 'white', cursor:'pointer'}}>
-                    <div style={{fontSize:12,fontWeight: regForm.serviceType===s.id ? 800 : 600, color: regForm.serviceType===s.id ? green : '#111'}}>{s.label}</div>
-                    <div style={{fontSize:10,color:'#64748b',marginTop:2}}>{s.desc}</div>
-                  </div>
-                ))}
-              </div>
-              <p style={{fontSize:10,color:'#94a3b8',marginTop:8}}>This matches How It Works: Store, Transport, or Supplying to FoodBridge</p>
             </div>
 
-            <input value={regForm.password} onChange={e=>setRegForm({...regForm,password:e.target.value})} placeholder="Password *" type="password" style={{padding:12,borderRadius:8,border:'1px solid #ddd',fontSize:14}}/>
-            <input value={regForm.confirmPassword} onChange={e=>setRegForm({...regForm,confirmPassword:e.target.value})} placeholder="Confirm Password - Rewrite again *" type="password" style={{padding:12,borderRadius:8,border:'1px solid #ddd',fontSize:14}}/>
+            <div>
+              <label style={{fontSize:11,fontWeight:800,color:green,letterSpacing:0.5}}>WHAT DO YOU WANT TO DO? *</label>
+              <div style={{position:'relative',marginTop:6}}>
+                <div onClick={()=>setShowServiceDrop(!showServiceDrop)} style={{padding:'12px 14px',borderRadius:8,border:'1px solid #ddd',background:'white',display:'flex',justifyContent:'space-between',alignItems:'center',cursor:'pointer',fontSize:14}}>
+                  <span style={{color: regForm.serviceType ? '#111' : '#9ca3af'}}>{regForm.serviceType ? serviceOptions.find(o=>o.id===regForm.serviceType)?.label : 'Select service category'}</span>
+                  <span style={{fontSize:12,color:green,transform: showServiceDrop ? 'rotate(180deg)' : 'rotate(0)', transition:'0.2s'}}>▼</span>
+                </div>
+                {showServiceDrop && (
+                  <div style={{position:'absolute',top:'100%',left:0,right:0,zIndex:20,background:'white',border:'1px solid #ddd',borderRadius:10,marginTop:6,boxShadow:'0 8px 20px rgba(0,0,0,0.1)',overflow:'hidden'}}>
+                    {serviceOptions.map(o=>(
+                      <div key={o.id} onClick={()=>{setRegForm({...regForm,serviceType:o.id}); setShowServiceDrop(false);}} style={{padding:'12px 14px',cursor:'pointer',background: regForm.serviceType===o.id ? '#dcfce7' : 'white', borderBottom:'1px solid #f3f4f6'}}>
+                        <div style={{fontSize:13,fontWeight:700,color: regForm.serviceType===o.id ? green : '#111'}}>{o.label}</div>
+                        <div style={{fontSize:11,color:'#64748b',marginTop:2}}>{o.desc}</div>
+                      </div>
+                    ))}
+                  </div>
+                )}
+              </div>
+            </div>
+
+            <div style={{position:'relative'}}>
+              <input value={regForm.password} onChange={e=>setRegForm({...regForm,password:e.target.value})} placeholder="Password *" type={showPass ? 'text' : 'password'} style={{width:'100%',padding:'12px 40px 12px 12px',borderRadius:8,border:'1px solid #ddd',fontSize:14,boxSizing:'border-box'}}/>
+              <span onClick={()=>setShowPass(!showPass)} style={{position:'absolute',right:12,top:'50%',transform:'translateY(-50%)',cursor:'pointer',fontSize:18}}>{showPass ? '🙈' : '👁️'}</span>
+            </div>
+            <div style={{position:'relative'}}>
+              <input value={regForm.confirmPassword} onChange={e=>setRegForm({...regForm,confirmPassword:e.target.value})} placeholder="Confirm Password *" type={showConfirmPass ? 'text' : 'password'} style={{width:'100%',padding:'12px 40px 12px 12px',borderRadius:8,border:'1px solid #ddd',fontSize:14,boxSizing:'border-box'}}/>
+              <span onClick={()=>setShowConfirmPass(!showConfirmPass)} style={{position:'absolute',right:12,top:'50%',transform:'translateY(-50%)',cursor:'pointer',fontSize:18}}>{showConfirmPass ? '🙈' : '👁️'}</span>
+            </div>
             
             <button type="submit" style={{background:green,color:'white',padding:13,borderRadius:8,border:'none',fontWeight:800,marginTop:6}}>Sign Up → Face Verification</button>
-            
-            <div style={{textAlign:'center',fontSize:13,marginTop:8}}>
-              <span style={{color:'#64748b'}}>Already have an account? </span>
-              <span onClick={()=>setPage('login')} style={{color:green,fontWeight:800,cursor:'pointer',textDecoration:'underline'}}>Sign In</span>
-            </div>
+            <div style={{textAlign:'center',fontSize:13,marginTop:8}}><span style={{color:'#64748b'}}>Already have an account? </span><span onClick={()=>setPage('login')} style={{color:green,fontWeight:800,cursor:'pointer',textDecoration:'underline'}}>Sign In</span></div>
           </form>
         </div>
       </div>
@@ -343,12 +398,38 @@ export default function App(){
 
   if(page==='faceVerify'){
     return(
-      <div style={{minHeight:'100vh',background:'#f8fafc',fontFamily:'Inter,sans-serif',padding:20,textAlign:'center'}}>
-        <h2 style={{color:green}}>Face Verification - Coming Next</h2>
-        <p style={{fontSize:13}}>Hello {regForm.firstName} {regForm.lastName}</p>
-        <p style={{fontSize:12}}>Account: {regForm.accountType} - Service: {regForm.serviceType}</p>
-        <p style={{fontSize:13,marginTop:10}}>Camera will open here next step.</p>
-        <button onClick={()=>setPage('home')} style={{marginTop:20,background:green,color:'white',padding:12,borderRadius:8,border:'none'}}>Back to Home</button>
+      <div style={{minHeight:'100vh',background:'#f8fafc',fontFamily:'Inter,sans-serif'}}>
+        <div style={{background:'white',padding:'20px',textAlign:'center',borderBottom:'1px solid #eee'}}>
+          <h2 style={{color:green,fontWeight:800}}>Face Verification</h2>
+          <p style={{fontSize:13,color:'#64748b'}}>Hello {regForm.firstName} {regForm.lastName} - {regForm.accountType}</p>
+        </div>
+        <div style={{maxWidth:430,margin:'20px auto',background:'white',padding:20,borderRadius:16,border:'1px solid #eee',textAlign:'center'}}>
+          <div style={{border:'2px dashed #166534',borderRadius:14,padding:16,background: faceVerified ? '#dcfce7' : '#F5F1E8'}}>
+            <p style={{fontSize:12,fontWeight:600,color:'#334155'}}>{livenessMsg}</p>
+            {cameraOn && <video ref={videoRef} autoPlay playsInline style={{width:'100%',borderRadius:12,marginTop:12,background:'black',height:260,objectFit:'cover'}}/>}
+            <canvas ref={canvasRef} style={{display:'none'}}/>
+            {faceImage && <img src={faceImage} alt="face" style={{width:'100%',borderRadius:12,marginTop:12,height:260,objectFit:'cover'}}/>}
+            <div style={{marginTop:14,display:'grid',gap:8}}>
+              {!cameraOn && !faceVerified && <button onClick={startCamera} style={{width:'100%',background:green,color:'white',padding:12,borderRadius:8,border:'none',fontWeight:700}}>📷 Start Camera</button>}
+              {cameraOn && <button onClick={captureFace} style={{width:'100%',background:'#111827',color:'white',padding:12,borderRadius:8,border:'none',fontWeight:700}}>📸 Capture Now</button>}
+              {faceVerified && <><div style={{color:green,fontWeight:800}}>✅ Verified</div><button onClick={proceedToOtp} style={{width:'100%',background:green,color:'white',padding:12,borderRadius:8,border:'none',fontWeight:800}}>Continue → OTP</button></>}
+            </div>
+          </div>
+        </div>
+      </div>
+    )
+  }
+
+  if(page==='otpVerify'){
+    return(
+      <div style={{minHeight:'100vh',background:'#f8fafc',fontFamily:'Inter,sans-serif'}}>
+        <div style={{background:'white',padding:'30px',textAlign:'center'}}><h2 style={{color:green}}>Verify Gmail</h2><p style={{fontSize:13}}>OTP sent to <b>{regForm.email}</b></p></div>
+        <div style={{maxWidth:400,margin:'20px auto',background:'white',padding:24,borderRadius:16,border:'1px solid #eee'}}>
+          <form onSubmit={(e)=>{e.preventDefault(); if(otpCode==='123456'){ alert('Account created!'); setPage('home'); } else alert('Use 123456');}} style={{display:'grid',gap:12}}>
+            <input value={otpCode} onChange={e=>setOtpCode(e.target.value)} placeholder="Enter OTP" style={{padding:14,borderRadius:8,border:'1px solid #ddd',textAlign:'center',letterSpacing:4}} maxLength={6}/>
+            <button type="submit" style={{background:green,color:'white',padding:12,borderRadius:8,border:'none',fontWeight:800}}>Verify & Create Account</button>
+          </form>
+        </div>
       </div>
     )
   }
@@ -359,11 +440,10 @@ export default function App(){
         <div style={{display:'flex',alignItems:'center',gap:8,fontWeight:900,fontSize:20,color:green}}><div style={{width:32,height:32,background:green,color:'white',borderRadius:8,display:'flex',alignItems:'center',justifyContent:'center'}}>F</div>FoodBridge</div>
         <div style={{display:'flex',gap:8,alignItems:'center'}}>
           <button onClick={()=>setPage('login')} style={{background:'none',border:'none',fontWeight:600,fontSize:13}}>Sign In</button>
-          <button onClick={()=>document.getElementById('contact')?.scrollIntoView({behavior:'smooth'})} style={{background:green,color:'white',border:'none',padding:'8px 14px',borderRadius:8,fontWeight:600,fontSize:13}}>Contact us</button>
+          <button onClick={()=>setPage('register')} style={{background:green,color:'white',border:'none',padding:'8px 14px',borderRadius:8,fontWeight:600,fontSize:13}}>Get Started</button>
           <button onClick={()=>setMenu(!menu)} style={{border:'1px solid #ddd',background:'white',borderRadius:8,padding:'6px 10px'}}>☰</button>
         </div>
       </header>
-
       {menu && (
         <div style={{background:'white',borderBottom:'1px solid #eee',padding:'0 16px',position:'sticky',top:57,zIndex:90}}>
           <div onClick={()=>setSol(!sol)} style={{padding:'18px 0',borderBottom:'1px solid #f1f5f9',fontWeight:600,cursor:'pointer',display:'flex',justifyContent:'space-between'}}><span>Solutions</span><span>{sol?'▴':'▾'}</span></div>
@@ -382,7 +462,6 @@ export default function App(){
           <div onClick={()=>setMenu(false)} style={{padding:'18px 0',cursor:'pointer',fontWeight:700,color:green}}>← Back to Home</div>
         </div>
       )}
-
       <section style={{textAlign:'center',padding:'50px 16px 30px',background:'#F5F1E8'}}>
         <p style={{color:green,fontWeight:800,fontSize:11,letterSpacing:2}}>FOODBRIDGE NIGERIA • GWAGWALADA, ABUJA</p>
         <h1 style={{fontSize:38,fontWeight:900,lineHeight:1.05,marginTop:12}}>CONNECTING FOOD.<br/><span style={{color:green}}>BRIDGING FAMILIES.</span></h1>
@@ -399,7 +478,6 @@ export default function App(){
           </div>
         </div>
       </section>
-
       <section id="features" style={{padding:'40px 16px',background:'white'}}>
         <h2 style={{fontSize:22,fontWeight:800,textAlign:'center'}}>One FoodBridge, Multiple Solutions</h2>
         <p style={{textAlign:'center',fontSize:13,color:'#64748b',marginTop:8}}>FoodBridge — Connecting Food, People & Places</p>
@@ -409,12 +487,10 @@ export default function App(){
           <div style={{background:'#F5F1E8',border:'1px solid #e7e0d0',borderRadius:12,padding:16}}><b>🛒 Buy & Sell Marketplace</b><p style={{fontSize:13,color:'#475569',marginTop:6}}>Buy in small, medium, large & bulk. Sell your farm produce to FoodBridge.</p></div>
         </div>
       </section>
-
       <section id="contact" style={{padding:'35px 16px',background:'#F5F1E8'}}>
         <h2 style={{fontWeight:800,textAlign:'center'}}>Contact Us</h2>
         <div style={{marginTop:18,background:'white',padding:14,borderRadius:10,fontSize:13,lineHeight:1.8,border:'1px solid #e7e0d0'}}>Email: foodbridge.nigeria@gmail.com<br/>Phone: 0816-383-1822<br/>Location: Gwagwalada, Abuja<br/>Founder: Francis Yakubu</div>
       </section>
-
       <footer style={{background:'white',padding:'25px 16px',borderTop:'1px solid #eee'}}>
         <div style={{display:'flex',flexDirection:'column',gap:12}}>
           <a href="https://www.tiktok.com/@foodbridge.ng.lim?_r=1&_t=ZS-9A5NZ6zEsQG" target="_blank" rel="noopener noreferrer" style={{display:'flex',alignItems:'center',gap:10,textDecoration:'none'}}><div style={{width:36,height:36,background:'black',borderRadius:8,display:'flex',alignItems:'center',justifyContent:'center'}}><span style={{color:'white',fontWeight:900,fontSize:20}}>♪</span></div><span style={{color:'black',fontWeight:700,fontSize:18}}>TikTok</span></a>
