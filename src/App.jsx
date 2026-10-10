@@ -10,11 +10,24 @@ export default function App(){
   const [sent,setSent]=useState(false);
   const green='#166534';
 
+  const [regForm,setRegForm]=useState({firstName:'',lastName:'',email:'',password:'',confirmPassword:'',accountType:'Personal',serviceType:'Transportation'});
+
   const handleSubmit=(e)=>{
     e.preventDefault();
     if(!form.name || !form.email || !form.message){alert('Please fill name, email and message'); return;}
     setSent(true);
     setTimeout(()=>{setSent(false); setForm({name:'',email:'',phone:'',subject:'Transportation',message:''})},3000);
+  };
+
+  const handleRegister=(e)=>{
+    e.preventDefault();
+    if(!regForm.firstName || !regForm.lastName || !regForm.email || !regForm.password){
+      alert('Please fill all fields'); return;
+    }
+    if(regForm.password !== regForm.confirmPassword){
+      alert('Passwords do not match - please rewrite to confirm'); return;
+    }
+    setPage('faceVerify');
   };
 
   if(page==='solutions'){
@@ -250,11 +263,92 @@ export default function App(){
         <div style={{background:'white',padding:'40px',textAlign:'center'}}><div style={{width:72,height:72,background:green,borderRadius:16,margin:'0 auto',display:'flex',alignItems:'center',justifyContent:'center',color:'white',fontSize:34,fontWeight:900}}>F</div><h1 style={{color:green,marginTop:12}}>FoodBridge</h1></div>
         <div style={{maxWidth:400,margin:'30px auto',background:'white',padding:24,borderRadius:16,border:'1px solid #eee'}}>
           <h2 style={{fontWeight:800}}>Welcome back</h2>
-          <input placeholder="Email" style={{width:'100%',padding:12,borderRadius:8,border:'1px solid #ddd',marginTop:15}}/>
+          <input placeholder="Gmail Address" style={{width:'100%',padding:12,borderRadius:8,border:'1px solid #ddd',marginTop:15}}/>
           <input placeholder="Password" type="password" style={{width:'100%',padding:12,borderRadius:8,border:'1px solid #ddd',marginTop:10}}/>
           <button style={{width:'100%',background:green,color:'white',padding:12,borderRadius:8,border:'none',marginTop:15,fontWeight:700}}>Sign In</button>
-          <p onClick={()=>{setPage('home'); setMenu(true);}} style={{textAlign:'center',marginTop:15,cursor:'pointer',fontSize:13}}>Back</p>
+          <div style={{textAlign:'center',marginTop:16,fontSize:13}}>
+            <span style={{color:'#64748b'}}>Don't have an account? </span>
+            <span onClick={()=>setPage('register')} style={{color:green,fontWeight:800,cursor:'pointer',textDecoration:'underline'}}>Sign Up</span>
+          </div>
+          <p onClick={()=>{setPage('home'); setMenu(true);}} style={{textAlign:'center',marginTop:15,cursor:'pointer',fontSize:13}}>← Back to Home</p>
         </div>
+      </div>
+    )
+  }
+
+  if(page==='register'){
+    return(
+      <div style={{minHeight:'100vh',background:'#f8fafc',fontFamily:'Inter,sans-serif'}}>
+        <div style={{background:'white',padding:'30px',textAlign:'center',borderBottom:'1px solid #eee'}}>
+          <div style={{width:72,height:72,background:green,borderRadius:16,margin:'0 auto',display:'flex',alignItems:'center',justifyContent:'center',color:'white',fontSize:34,fontWeight:900}}>F</div>
+          <h2 style={{color:green,marginTop:12}}>Create Account</h2>
+          <p style={{fontSize:13,color:'#64748b'}}>Join FoodBridge - Gwagwalada, Abuja</p>
+        </div>
+        <div style={{maxWidth:450,margin:'20px auto',background:'white',padding:22,borderRadius:16,border:'1px solid #eee'}}>
+          <form onSubmit={handleRegister} style={{display:'grid',gap:12}}>
+            <div style={{display:'grid',gridTemplateColumns:'1fr 1fr',gap:10}}>
+              <input value={regForm.firstName} onChange={e=>setRegForm({...regForm,firstName:e.target.value})} placeholder="First Name *" style={{padding:12,borderRadius:8,border:'1px solid #ddd',fontSize:14}}/>
+              <input value={regForm.lastName} onChange={e=>setRegForm({...regForm,lastName:e.target.value})} placeholder="Last Name *" style={{padding:12,borderRadius:8,border:'1px solid #ddd',fontSize:14}}/>
+            </div>
+            <input value={regForm.email} onChange={e=>setRegForm({...regForm,email:e.target.value})} placeholder="Gmail Address *" type="email" style={{padding:12,borderRadius:8,border:'1px solid #ddd',fontSize:14}}/>
+
+            {/* ACCOUNT TYPE BOX - AS YOU ASKED - FROM HOW IT WORKS */}
+            <div style={{background:'#F5F1E8',borderRadius:12,padding:14,border:'1px solid #e7e0d0'}}>
+              <label style={{fontSize:12,fontWeight:800,color:green}}>WHO ARE YOU? - Select Account Type *</label>
+              <div style={{display:'grid',gridTemplateColumns:'1fr 1fr',gap:8,marginTop:8}}>
+                {[
+                  {id:'Personal', desc:'Individual sending/receiving'},
+                  {id:'Family', desc:'Family sending to loved ones'},
+                  {id:'Student', desc:'Student receiving from parents'},
+                  {id:'Company/Organization', desc:'Business, School, NGO, Restaurant'}
+                ].map(a=>(
+                  <div key={a.id} onClick={()=>setRegForm({...regForm,accountType:a.id})} style={{padding:10,borderRadius:8,border: regForm.accountType===a.id ? `2px solid ${green}` : '1px solid #ddd', background: regForm.accountType===a.id ? '#dcfce7' : 'white', cursor:'pointer'}}>
+                    <div style={{fontSize:12,fontWeight: regForm.accountType===a.id ? 800 : 600, color: regForm.accountType===a.id ? green : '#111'}}>{a.id}</div>
+                    <div style={{fontSize:10,color:'#64748b',marginTop:2}}>{a.desc}</div>
+                  </div>
+                ))}
+              </div>
+
+              <label style={{fontSize:12,fontWeight:800,color:green,marginTop:14,display:'block'}}>WHAT DO YOU WANT TO DO? - Service Category *</label>
+              <div style={{display:'grid',gridTemplateColumns:'1fr 1fr',gap:8,marginTop:8}}>
+                {[
+                  {id:'Transportation', label:'🚚 Transport', desc:'Send food to destination'},
+                  {id:'Storage', label:'📦 Storage', desc:'Store food safely'},
+                  {id:'Buying', label:'🛒 Buying', desc:'Buy food small/bulk'},
+                  {id:'Selling', label:'🌾 Selling / Supplying', desc:'Sell farm produce to us'}
+                ].map(s=>(
+                  <div key={s.id} onClick={()=>setRegForm({...regForm,serviceType:s.id})} style={{padding:10,borderRadius:8,border: regForm.serviceType===s.id ? `2px solid ${green}` : '1px solid #ddd', background: regForm.serviceType===s.id ? '#dcfce7' : 'white', cursor:'pointer'}}>
+                    <div style={{fontSize:12,fontWeight: regForm.serviceType===s.id ? 800 : 600, color: regForm.serviceType===s.id ? green : '#111'}}>{s.label}</div>
+                    <div style={{fontSize:10,color:'#64748b',marginTop:2}}>{s.desc}</div>
+                  </div>
+                ))}
+              </div>
+              <p style={{fontSize:10,color:'#94a3b8',marginTop:8}}>This matches How It Works: Store, Transport, or Supplying to FoodBridge</p>
+            </div>
+
+            <input value={regForm.password} onChange={e=>setRegForm({...regForm,password:e.target.value})} placeholder="Password *" type="password" style={{padding:12,borderRadius:8,border:'1px solid #ddd',fontSize:14}}/>
+            <input value={regForm.confirmPassword} onChange={e=>setRegForm({...regForm,confirmPassword:e.target.value})} placeholder="Confirm Password - Rewrite again *" type="password" style={{padding:12,borderRadius:8,border:'1px solid #ddd',fontSize:14}}/>
+            
+            <button type="submit" style={{background:green,color:'white',padding:13,borderRadius:8,border:'none',fontWeight:800,marginTop:6}}>Sign Up → Face Verification</button>
+            
+            <div style={{textAlign:'center',fontSize:13,marginTop:8}}>
+              <span style={{color:'#64748b'}}>Already have an account? </span>
+              <span onClick={()=>setPage('login')} style={{color:green,fontWeight:800,cursor:'pointer',textDecoration:'underline'}}>Sign In</span>
+            </div>
+          </form>
+        </div>
+      </div>
+    )
+  }
+
+  if(page==='faceVerify'){
+    return(
+      <div style={{minHeight:'100vh',background:'#f8fafc',fontFamily:'Inter,sans-serif',padding:20,textAlign:'center'}}>
+        <h2 style={{color:green}}>Face Verification - Coming Next</h2>
+        <p style={{fontSize:13}}>Hello {regForm.firstName} {regForm.lastName}</p>
+        <p style={{fontSize:12}}>Account: {regForm.accountType} - Service: {regForm.serviceType}</p>
+        <p style={{fontSize:13,marginTop:10}}>Camera will open here next step.</p>
+        <button onClick={()=>setPage('home')} style={{marginTop:20,background:green,color:'white',padding:12,borderRadius:8,border:'none'}}>Back to Home</button>
       </div>
     )
   }
@@ -295,7 +389,7 @@ export default function App(){
         <h2 style={{fontSize:15,fontWeight:800,marginTop:14,lineHeight:1.4}}>Do you Want to Store, Do you Want to Transport<br/>or are you Supplying to FoodBridge?</h2>
         <p style={{fontWeight:800,fontSize:13,marginTop:10,color:'#111827'}}>Your Food. Your Destination. Your Choice.</p>
         <div style={{display:'flex',gap:10,justifyContent:'center',marginTop:20}}>
-          <button style={{background:green,color:'white',padding:'13px 26px',borderRadius:10,border:'none',fontWeight:700}}>Get Started</button>
+          <button onClick={()=>setPage('register')} style={{background:green,color:'white',padding:'13px 26px',borderRadius:10,border:'none',fontWeight:700}}>Get Started</button>
           <button onClick={()=>setPage('about')} style={{background:'white',color:green,padding:'13px 26px',borderRadius:10,border:'1px solid '+green,fontWeight:700}}>How It Works</button>
         </div>
         <div style={{margin:'30px auto 0',maxWidth:640,borderRadius:18,overflow:'hidden',border:'1px solid #e2e8f0'}}>
