@@ -1,4 +1,11 @@
 import { useState, useRef } from 'react';
+import { createClient } from '@supabase/supabase-js';
+
+// REPLACE THESE WITH YOUR NEW PROJECT KEYS
+const supabase = createClient(
+  'https://YOUR_PROJECT_ID.supabase.co',
+  'YOUR_ANON_KEY'
+);
 
 export default function App(){
   const [menu,setMenu]=useState(false);
@@ -20,6 +27,8 @@ export default function App(){
   const [cameraOn,setCameraOn]=useState(false);
   const [livenessMsg,setLivenessMsg]=useState('Click Start Camera');
   const [otpCode,setOtpCode]=useState('');
+  const [userData,setUserData]=useState(null);
+  const [activeTab,setActiveTab]=useState('shipments');
   const videoRef=useRef(null);
   const canvasRef=useRef(null);
 
@@ -78,6 +87,30 @@ export default function App(){
   const proceedToOtp=()=>{
     if(!faceVerified){alert('Verify face first'); return;}
     alert(`OTP sent to ${regForm.email} (Demo: 123456)`); setPage('otpVerify');
+  };
+
+  const handleFinalVerify = async (e) => {
+    e.preventDefault();
+    if(otpCode !== '123456'){ alert('Use 123456'); return; }
+    try {
+      let faceUrl = null;
+      if(faceImage){
+        const blob = await (await fetch(faceImage)).blob();
+        const fileName = `${regForm.email}-${Date.now()}.jpg`;
+        await supabase.storage.from('faces').upload(fileName, blob);
+        faceUrl = supabase.storage.from('faces').getPublicUrl(fileName).data.publicUrl;
+      }
+      await supabase.from('users').insert([{
+        first_name: regForm.firstName,
+        last_name: regForm.lastName,
+        email: regForm.email,
+        account_type: regForm.accountType,
+        service_type: regForm.serviceType,
+        face_image_url: faceUrl
+      }]);
+    } catch(err){ console.log(err); }
+    setUserData(regForm);
+    setPage('profile');
   };
 
   if(page==='solutions'){
@@ -315,7 +348,7 @@ export default function App(){
           <h2 style={{fontWeight:800}}>Welcome back</h2>
           <input placeholder="Gmail Address" style={{width:'100%',padding:12,borderRadius:8,border:'1px solid #ddd',marginTop:15}}/>
           <input placeholder="Password" type="password" style={{width:'100%',padding:12,borderRadius:8,border:'1px solid #ddd',marginTop:10}}/>
-          <button style={{width:'100%',background:green,color:'white',padding:12,borderRadius:8,border:'none',marginTop:15,fontWeight:700}}>Sign In</button>
+          <button onClick={()=>setPage('profile')} style={{width:'100%',background:green,color:'white',padding:12,borderRadius:8,border:'none',marginTop:15,fontWeight:700}}>Sign In</button>
           <div style={{textAlign:'center',marginTop:16,fontSize:13}}><span style={{color:'#64748b'}}>Don't have an account? </span><span onClick={()=>setPage('register')} style={{color:green,fontWeight:800,cursor:'pointer',textDecoration:'underline'}}>Sign Up</span></div>
           <p onClick={()=>{setPage('home'); setMenu(true);}} style={{textAlign:'center',marginTop:15,cursor:'pointer',fontSize:13}}>← Back to Home</p>
         </div>
@@ -338,7 +371,6 @@ export default function App(){
               <input value={regForm.lastName} onChange={e=>setRegForm({...regForm,lastName:e.target.value})} placeholder="Last Name *" style={{padding:12,borderRadius:8,border:'1px solid #ddd',fontSize:14}}/>
             </div>
             <input value={regForm.email} onChange={e=>setRegForm({...regForm,email:e.target.value})} placeholder="Gmail Address *" type="email" style={{padding:12,borderRadius:8,border:'1px solid #ddd',fontSize:14}}/>
-
             <div>
               <label style={{fontSize:11,fontWeight:800,color:green,letterSpacing:0.5}}>WHO ARE YOU? *</label>
               <div style={{position:'relative',marginTop:6}}>
@@ -358,7 +390,6 @@ export default function App(){
                 )}
               </div>
             </div>
-
             <div>
               <label style={{fontSize:11,fontWeight:800,color:green,letterSpacing:0.5}}>WHAT DO YOU WANT TO DO? *</label>
               <div style={{position:'relative',marginTop:6}}>
@@ -378,7 +409,6 @@ export default function App(){
                 )}
               </div>
             </div>
-
             <div style={{position:'relative'}}>
               <input value={regForm.password} onChange={e=>setRegForm({...regForm,password:e.target.value})} placeholder="Password *" type={showPass ? 'text' : 'password'} style={{width:'100%',padding:'12px 40px 12px 12px',borderRadius:8,border:'1px solid #ddd',fontSize:14,boxSizing:'border-box'}}/>
               <span onClick={()=>setShowPass(!showPass)} style={{position:'absolute',right:12,top:'50%',transform:'translateY(-50%)',cursor:'pointer',fontSize:18}}>{showPass ? '🙈' : '👁️'}</span>
@@ -387,7 +417,6 @@ export default function App(){
               <input value={regForm.confirmPassword} onChange={e=>setRegForm({...regForm,confirmPassword:e.target.value})} placeholder="Confirm Password *" type={showConfirmPass ? 'text' : 'password'} style={{width:'100%',padding:'12px 40px 12px 12px',borderRadius:8,border:'1px solid #ddd',fontSize:14,boxSizing:'border-box'}}/>
               <span onClick={()=>setShowConfirmPass(!showConfirmPass)} style={{position:'absolute',right:12,top:'50%',transform:'translateY(-50%)',cursor:'pointer',fontSize:18}}>{showConfirmPass ? '🙈' : '👁️'}</span>
             </div>
-            
             <button type="submit" style={{background:green,color:'white',padding:13,borderRadius:8,border:'none',fontWeight:800,marginTop:6}}>Sign Up → Face Verification</button>
             <div style={{textAlign:'center',fontSize:13,marginTop:8}}><span style={{color:'#64748b'}}>Already have an account? </span><span onClick={()=>setPage('login')} style={{color:green,fontWeight:800,cursor:'pointer',textDecoration:'underline'}}>Sign In</span></div>
           </form>
@@ -425,10 +454,61 @@ export default function App(){
       <div style={{minHeight:'100vh',background:'#f8fafc',fontFamily:'Inter,sans-serif'}}>
         <div style={{background:'white',padding:'30px',textAlign:'center'}}><h2 style={{color:green}}>Verify Gmail</h2><p style={{fontSize:13}}>OTP sent to <b>{regForm.email}</b></p></div>
         <div style={{maxWidth:400,margin:'20px auto',background:'white',padding:24,borderRadius:16,border:'1px solid #eee'}}>
-          <form onSubmit={(e)=>{e.preventDefault(); if(otpCode==='123456'){ alert('Account created!'); setPage('home'); } else alert('Use 123456');}} style={{display:'grid',gap:12}}>
-            <input value={otpCode} onChange={e=>setOtpCode(e.target.value)} placeholder="Enter OTP" style={{padding:14,borderRadius:8,border:'1px solid #ddd',textAlign:'center',letterSpacing:4}} maxLength={6}/>
+          <form onSubmit={handleFinalVerify} style={{display:'grid',gap:12}}>
+            <input value={otpCode} onChange={e=>setOtpCode(e.target.value)} placeholder="Enter OTP - 123456" style={{padding:14,borderRadius:8,border:'1px solid #ddd',textAlign:'center',letterSpacing:4}} maxLength={6}/>
             <button type="submit" style={{background:green,color:'white',padding:12,borderRadius:8,border:'none',fontWeight:800}}>Verify & Create Account</button>
           </form>
+        </div>
+      </div>
+    )
+  }
+
+  if(page==='profile'){
+    return(
+      <div style={{fontFamily:'Inter,sans-serif',background:'#f8fafc',minHeight:'100vh'}}>
+        <header style={{display:'flex',justifyContent:'space-between',padding:'12px 16px',background:'white',borderBottom:'1px solid #eee',position:'sticky',top:0,zIndex:99}}>
+          <div style={{fontWeight:900,color:green,display:'flex',gap:8,alignItems:'center'}}><div style={{width:32,height:32,background:green,color:'white',borderRadius:8,display:'flex',alignItems:'center',justifyContent:'center'}}>F</div>FoodBridge</div>
+          <button onClick={()=>{setPage('home'); setMenu(false)}} style={{border:'1px solid #ddd',background:'white',padding:'8px 14px',borderRadius:8}}>Home</button>
+        </header>
+        <div style={{padding:'20px 16px'}}>
+          <div style={{background:'white',borderRadius:16,padding:20,border:'1px solid #eee',display:'flex',gap:14,alignItems:'center'}}>
+            <img src={faceImage || 'https://i.pravatar.cc/100'} style={{width:64,height:64,borderRadius:50,objectFit:'cover',border:'3px solid #dcfce7'}} alt="profile"/>
+            <div>
+              <h2 style={{fontWeight:800,fontSize:18}}>{regForm.firstName} {regForm.lastName}</h2>
+              <p style={{fontSize:12,color:'#64748b',marginTop:2}}>{regForm.accountType} • {regForm.serviceType}</p>
+              <p style={{fontSize:11,color:green,marginTop:4,fontWeight:700}}>✓ Verified • Gwagwalada Branch</p>
+            </div>
+          </div>
+          <div style={{display:'grid',gridTemplateColumns:'1fr 1fr 1fr',gap:10,marginTop:14}}>
+            <div style={{background:green,color:'white',borderRadius:12,padding:14,textAlign:'center'}}><b style={{fontSize:20}}>3</b><p style={{fontSize:11,marginTop:2}}>Active</p></div>
+            <div style={{background:'white',borderRadius:12,padding:14,textAlign:'center',border:'1px solid #eee'}}><b style={{fontSize:20}}>1</b><p style={{fontSize:11,color:'#64748b',marginTop:2}}>In Storage</p></div>
+            <div style={{background:'#f59e0b',color:'white',borderRadius:12,padding:14,textAlign:'center'}}><b style={{fontSize:20}}>2</b><p style={{fontSize:11,marginTop:2}}>To Pickup</p></div>
+          </div>
+          <div style={{display:'flex',gap:8,marginTop:16}}>
+            {[{id:'shipments', label:'🚚 Shipments'},{id:'storage', label:'📦 Storage'},{id:'codes', label:'🔑 Codes'}].map(t=>(
+              <button key={t.id} onClick={()=>setActiveTab(t.id)} style={{padding:'10px 16px',borderRadius:20,border:'none',background: activeTab===t.id ? green : 'white', color: activeTab===t.id ? 'white' : '#334155',fontWeight:700,fontSize:13}}>{t.label}</button>
+            ))}
+          </div>
+          <div style={{marginTop:16}}>
+            {activeTab==='shipments' && (
+              <div style={{display:'grid',gap:10}}>
+                {[{code:'FB-ABJ-7H9K', item:'20kg Rice + Garri', to:'Student - UniAbuja', status:'On Transit'},{code:'FB-ABJ-8J2L', item:'10kg Beans', to:'Family - Lagos', status:'Ready for Pickup'}].map((s,i)=>(
+                  <div key={i} style={{background:'white',borderRadius:12,padding:14,border:'1px solid #eee'}}>
+                    <div style={{display:'flex',justifyContent:'space-between'}}><b style={{fontSize:13}}>{s.code}</b><span style={{fontSize:11,background: s.status==='Ready for Pickup' ? '#dcfce7' : '#fef3c7',color: s.status==='Ready for Pickup' ? green : '#92400e',padding:'4px 8px',borderRadius:10,fontWeight:700}}>{s.status}</span></div>
+                    <p style={{fontSize:13,marginTop:6}}>{s.item}</p>
+                    <p style={{fontSize:11,color:'#64748b',marginTop:2}}>To: {s.to}</p>
+                  </div>
+                ))}
+              </div>
+            )}
+            {activeTab==='codes' && (
+              <div style={{background:'#111827',color:'white',borderRadius:12,padding:18}}>
+                <b>🔑 Active Pickup Code</b>
+                <div style={{background:'white',color:'black',borderRadius:8,padding:12,marginTop:12,textAlign:'center',letterSpacing:3,fontWeight:900,fontSize:18}}>FB-ABJ-7H9K</div>
+                <button onClick={()=>{navigator.clipboard.writeText('FB-ABJ-7H9K'); alert('Copied!')}} style={{width:'100%',marginTop:12,background:'#22c55e',color:'white',padding:10,borderRadius:8,border:'none',fontWeight:700}}>Copy Code</button>
+              </div>
+            )}
+          </div>
         </div>
       </div>
     )
