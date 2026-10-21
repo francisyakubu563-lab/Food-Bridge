@@ -12,7 +12,7 @@ export default function App(){
 
   const handleSubmit=(e)=>{
     e.preventDefault();
-    if(!form.name || !form.email || !form.message){alert('Please fill name, email and message'); return;}
+    if(!form.name || !form.email || !form.phone || !form.message){alert('Please fill name, email, phone and message'); return;}
     setSent(true);
     setTimeout(()=>{setSent(false); setForm({name:'',email:'',phone:'',subject:'Transportation',message:''})},3000);
   };
@@ -109,7 +109,7 @@ export default function App(){
               <input value={form.name} onChange={e=>setForm({...form,name:e.target.value})} placeholder="Full Name *" style={{padding:12,borderRadius:8,border:'1px solid #ddd',fontSize:14}}/>
               <div style={{display:'grid',gridTemplateColumns:'1fr 1fr',gap:10}}>
                 <input value={form.email} onChange={e=>setForm({...form,email:e.target.value})} placeholder="Email *" style={{padding:12,borderRadius:8,border:'1px solid #ddd',fontSize:14}}/>
-                <input value={form.phone} onChange={e=>setForm({...form,phone:e.target.value})} placeholder="Phone" style={{padding:12,borderRadius:8,border:'1px solid #ddd',fontSize:14}}/>
+                <input value={form.phone} onChange={e=>setForm({...form,phone:e.target.value})} placeholder="Phone *" required style={{padding:12,borderRadius:8,border:'1px solid #ddd',fontSize:14}}/>
               </div>
               <select value={form.subject} onChange={e=>setForm({...form,subject:e.target.value})} style={{padding:12,borderRadius:8,border:'1px solid #ddd',fontSize:14}}>
                 <option>Transportation</option>
@@ -278,7 +278,6 @@ export default function App(){
 
       {menu && (
         <div style={{background:'white',borderBottom:'1px solid #eee',padding:'0 16px',position:'sticky',top:57,zIndex:90}}>
-          {/* PROFESSIONAL FOODBIDGE SOLUTIONS - NOT SELLSYNC */}
           <div onClick={()=>setSol(!sol)} style={{padding:'18px 0',borderBottom:'1px solid #f1f5f9',fontWeight:600,cursor:'pointer',display:'flex',justifyContent:'space-between'}}><span>Solutions</span><span>{sol?'▴':'▾'}</span></div>
           {sol && <div style={{padding:'0 0 12px 0',display:'grid',gap:8}}>
             <div onClick={()=>{setMenu(false);setPage('solutions')}} style={{background:'#F5F1E8',borderRadius:10,padding:12,cursor:'pointer'}}><b style={{fontSize:13,color:green}}>👨‍👩‍👧‍👦 Personal & Family Delivery</b><p style={{fontSize:11,color:'#64748b',marginTop:4}}>Send foodstuff to loved ones across Nigeria</p></div>
