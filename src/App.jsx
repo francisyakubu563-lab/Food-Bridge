@@ -8,10 +8,6 @@ export default function App(){
   const [openHelp,setOpenHelp]=useState(null);
   const [form,setForm]=useState({name:'',email:'',phone:'',subject:'Transportation',message:''});
   const [sent,setSent]=useState(false);
-  // NEW - for auth
-  const [loginForm,setLoginForm]=useState({phone:'',password:''});
-  const [regForm,setRegForm]=useState({name:'',phone:'',email:'',password:'',type:'Personal'});
-  const [authError,setAuthError]=useState('');
   const green='#166534';
 
   const handleSubmit=(e)=>{
@@ -21,89 +17,6 @@ export default function App(){
     setTimeout(()=>{setSent(false); setForm({name:'',email:'',phone:'',subject:'Transportation',message:''})},3000);
   };
 
-  const handleRegister=(e)=>{
-    e.preventDefault();
-    setAuthError('');
-    if(!regForm.name || !regForm.phone || !regForm.email || !regForm.password){
-      setAuthError('Please fill all fields including phone number'); return;
-    }
-    if(regForm.phone.length < 10){setAuthError('Enter valid phone number e.g 08163831822'); return;}
-    if(regForm.password.length < 6){setAuthError('Password must be at least 6 characters'); return;}
-    // HERE YOU CONNECT TO SUPABASE
-    // await supabase.auth.signUp({email: regForm.email, password: regForm.password, options:{data:{phone: regForm.phone, full_name: regForm.name}}})
-    alert(`Account created for ${regForm.name} - Phone: ${regForm.phone}. Now save to Supabase profiles table with phone column.`);
-    setPage('login');
-    setRegForm({name:'',phone:'',email:'',password:'',type:'Personal'});
-  };
-
-  const handleLogin=(e)=>{
-    e.preventDefault();
-    setAuthError('');
-    if(!loginForm.phone || !loginForm.password){
-      setAuthError('Phone number and password are required'); return;
-    }
-    // HERE YOU CONNECT TO SUPABASE - login with phone
-    // const {data} = await supabase.from('profiles').select('*').eq('phone', loginForm.phone).eq('password', loginForm.password)
-    alert(`Login with Phone: ${loginForm.phone}`);
-  };
-
-  if(page==='register'){
-    return(
-      <div style={{minHeight:'100vh',background:'#f8fafc',fontFamily:'Inter,sans-serif'}}>
-        <div style={{background:'white',padding:'16px 20px',display:'flex',justifyContent:'space-between',alignItems:'center',borderBottom:'1px solid #eee'}}>
-          <div onClick={()=>setPage('home')} style={{fontWeight:900,color:green,cursor:'pointer',display:'flex',gap:8,alignItems:'center'}}><div style={{width:32,height:32,background:green,color:'white',borderRadius:8,display:'flex',alignItems:'center',justifyContent:'center'}}>F</div>FoodBridge</div>
-          <button onClick={()=>setPage('home')} style={{border:'1px solid #ddd',background:'white',padding:'8px 14px',borderRadius:8,fontSize:13}}>← Home</button>
-        </div>
-        <div style={{maxWidth:420,margin:'30px auto',background:'white',padding:24,borderRadius:16,border:'1px solid #eee'}}>
-          <h2 style={{fontWeight:900,fontSize:22}}>Create Account</h2>
-          <p style={{fontSize:13,color:'#64748b',marginTop:4}}>Join FoodBridge - Phone required for pickup SMS</p>
-          <form onSubmit={handleRegister} style={{marginTop:18,display:'grid',gap:12}}>
-            <input value={regForm.name} onChange={e=>setRegForm({...regForm,name:e.target.value})} placeholder="Full Name *" style={{padding:12,borderRadius:8,border:'1px solid #ddd',fontSize:14}}/>
-            <input value={regForm.phone} onChange={e=>setRegForm({...regForm,phone:e.target.value})} placeholder="Phone Number * e.g 08163831822" type="tel" style={{padding:12,borderRadius:8,border:'1px solid #166534',fontSize:14,background:'#f0fdf4'}}/>
-            <input value={regForm.email} onChange={e=>setRegForm({...regForm,email:e.target.value})} placeholder="Email *" type="email" style={{padding:12,borderRadius:8,border:'1px solid #ddd',fontSize:14}}/>
-            <select value={regForm.type} onChange={e=>setRegForm({...regForm,type:e.target.value})} style={{padding:12,borderRadius:8,border:'1px solid #ddd',fontSize:14}}>
-              <option>Personal</option>
-              <option>Family</option>
-              <option>Student</option>
-              <option>Company/Organization</option>
-            </select>
-            <input value={regForm.password} onChange={e=>setRegForm({...regForm,password:e.target.value})} placeholder="Password * min 6" type="password" style={{padding:12,borderRadius:8,border:'1px solid #ddd',fontSize:14}}/>
-            {authError && <div style={{background:'#fee2e2',color:'#b91c1c',padding:10,borderRadius:8,fontSize:12,fontWeight:600}}>{authError}</div>}
-            <button type="submit" style={{background:green,color:'white',padding:12,borderRadius:8,border:'none',fontWeight:800,marginTop:4}}>Create Account</button>
-            <p style={{textAlign:'center',fontSize:13}}>Already have account? <span onClick={()=>setPage('login')} style={{color:green,fontWeight:800,cursor:'pointer'}}>Sign In</span></p>
-          </form>
-        </div>
-      </div>
-    )
-  }
-
-  if(page==='login'){
-    return(
-      <div style={{minHeight:'100vh',background:'#f8fafc',fontFamily:'Inter,sans-serif'}}>
-        <div style={{background:'white',padding:'16px 20px',display:'flex',justifyContent:'space-between',alignItems:'center',borderBottom:'1px solid #eee'}}>
-          <div onClick={()=>setPage('home')} style={{fontWeight:900,color:green,cursor:'pointer',display:'flex',gap:8,alignItems:'center'}}><div style={{width:32,height:32,background:green,color:'white',borderRadius:8,display:'flex',alignItems:'center',justifyContent:'center'}}>F</div>FoodBridge</div>
-          <button onClick={()=>setPage('home')} style={{border:'1px solid #ddd',background:'white',padding:'8px 14px',borderRadius:8,fontSize:13}}>← Home</button>
-        </div>
-        <div style={{maxWidth:400,margin:'30px auto',background:'white',padding:24,borderRadius:16,border:'1px solid #eee'}}>
-          <h2 style={{fontWeight:900}}>Welcome back</h2>
-          <p style={{fontSize:12,color:'#64748b',marginTop:4}}>Login with phone number used during registration</p>
-          <form onSubmit={handleLogin} style={{marginTop:16,display:'grid',gap:10}}>
-            <input value={loginForm.phone} onChange={e=>setLoginForm({...loginForm,phone:e.target.value})} placeholder="Phone Number *" type="tel" style={{width:'100%',padding:12,borderRadius:8,border:'1px solid #166534',fontSize:14,background:'#f0fdf4'}}/>
-            <input value={loginForm.password} onChange={e=>setLoginForm({...loginForm,password:e.target.value})} placeholder="Password *" type="password" style={{width:'100%',padding:12,borderRadius:8,border:'1px solid #ddd',fontSize:14}}/>
-            {authError && <div style={{background:'#fee2e2',color:'#b91c1c',padding:10,borderRadius:8,fontSize:12,fontWeight:600}}>{authError}</div>}
-            <button type="submit" style={{width:'100%',background:green,color:'white',padding:12,borderRadius:8,border:'none',fontWeight:700}}>Sign In</button>
-            <div style={{background:'#F5F1E8',padding:12,borderRadius:8,textAlign:'center',marginTop:8}}>
-              <p style={{fontSize:13}}>Don't have an account?</p>
-              <p onClick={()=>setPage('register')} style={{color:green,fontWeight:800,cursor:'pointer',marginTop:4,fontSize:14}}>Create Account →</p>
-              <p style={{fontSize:11,color:'#64748b',marginTop:6}}>You need phone number to receive pickup code via SMS</p>
-            </div>
-          </form>
-        </div>
-      </div>
-    )
-  }
-
-  // ALL YOUR OTHER PAGES REMAIN SAME - solutions, support, blog, about
   if(page==='solutions'){
     return(
       <div style={{fontFamily:'Inter,sans-serif',background:'white',minHeight:'100vh'}}>
@@ -171,14 +84,14 @@ export default function App(){
             <h2 style={{fontWeight:800,color:green}}>Frequently Asked Questions</h2>
             <div style={{marginTop:12,display:'grid',gap:10}}>
               {[
-                {q:'How do I send foodstuff to my child in school?', a:'Create a Family or Personal Account, and your child should have a Student Account. Pack foodstuff, bring to FoodBridge branch, provide your child’s name, school, phone number. We transport it to our branch near the school. Your child gets SMS with pickup code and collects it.'},
-                {q:'What account type should I use?', a:'Personal: For individuals sending/receiving. Family: For families sending to relatives/loved ones. Student: For students receiving from parents/guardians. Company/Organization: For businesses, schools, NGOs, restaurants sending food to branches, clients, employees, customers.'},
-                {q:'Where do I drop off and pickup foodstuff?', a:'We operate through designated deposit and pickup locations/branches, currently in Gwagwalada, Abuja and expanding.'},
-                {q:'How long can you store my food?', a:'We offer short-term (days/weeks) and long-term (months) storage.'},
-                {q:'Can I buy foodstuff in bulk from FoodBridge?', a:'Yes! FoodBridge is also a marketplace. You can buy in small, medium, large, and bulk quantities.'},
-                {q:'Can I sell my farm produce to FoodBridge?', a:'Yes. Farmers, suppliers, traders, individuals can bring foodstuff to sell.'},
-                {q:'How much does transportation cost?', a:'Cost depends on quantity, weight, distance and destination. Contact us: 0816-383-1822'},
-                {q:'How do I track my delivery?', a:'After deposit, you get receipt with tracking ID and SMS updates.'},
+                {q:'How do I send foodstuff to my child in school?', a:'Create a Family or Personal Account, and your child should have a Student Account. Pack foodstuff, bring to FoodBridge branch, provide your child’s name, school, phone number. We transport it to our branch near the school. Your child gets SMS with pickup code and collects it. Deposit → Register → Provide details → Transport → Recipient picks up.'},
+                {q:'What account type should I use?', a:'Personal: For individuals sending/receiving. Family: For families sending to relatives/loved ones. Student: For students receiving from parents/guardians. Company/Organization: For businesses, schools, NGOs, restaurants sending food to branches, clients, employees, customers. Choose the one that best describes you.'},
+                {q:'Where do I drop off and pickup foodstuff?', a:'We operate through designated deposit and pickup locations/branches, currently in Gwagwalada, Abuja and expanding. You drop off at a branch near you, recipient picks up at branch near them. Address will be shared after registration. Coming soon: home pickup and delivery in Abuja.'},
+                {q:'How long can you store my food?', a:'We offer short-term (days/weeks) and long-term (months) storage. You bring foodstuff, select Storage, agree on duration and fee. We store safely. You collect when needed. Suitable for individuals, families, students, companies, food suppliers. FoodBridge serves as extension of your own storage.'},
+                {q:'Can I buy foodstuff in bulk from FoodBridge?', a:'Yes! FoodBridge is also a marketplace. You can buy in small, medium, large, and bulk quantities. Visit our branch, choose what you need (rice, beans, garri, palm oil etc), buy and we can transport it to your destination anywhere in Nigeria through our logistics.'},
+                {q:'Can I sell my farm produce to FoodBridge?', a:'Yes. Farmers, suppliers, traders, individuals can bring foodstuff to sell. We buy at different scales subject to quality, quantity, pricing requirements. Bring your produce, tell us you want to sell, we inspect and process payment. You can also choose storage or transport instead of selling.'},
+                {q:'How much does transportation cost?', a:'Cost depends on quantity, weight, distance and destination. We keep it affordable – that is part of our mission. You will get exact price at branch after providing details. No hidden charges.'},
+                {q:'How do I track my delivery?', a:'After deposit, you get receipt with tracking ID and SMS updates. Sender and recipient must be registered. Recipient gets SMS/call when ready for pickup with code. You can also call our support or email foodbridge.nigeria@gmail.com with your tracking ID.'},
               ].map((f,i)=>(
                 <div key={i} onClick={()=>setOpenFaq(openFaq===i?null:i)} style={{background:i===openFaq?'#166534':'#F5F1E8',color:i===openFaq?'white':'#111',borderRadius:10,padding:12,cursor:'pointer',transition:'0.2s'}}>
                   <div style={{display:'flex',justifyContent:'space-between',fontWeight:700,fontSize:13,gap:8}}><span>{f.q}</span><span>{openFaq===i?'−':'+'}</span></div>
@@ -194,7 +107,7 @@ export default function App(){
               <input value={form.name} onChange={e=>setForm({...form,name:e.target.value})} placeholder="Full Name *" style={{padding:12,borderRadius:8,border:'1px solid #ddd',fontSize:14}}/>
               <div style={{display:'grid',gridTemplateColumns:'1fr 1fr',gap:10}}>
                 <input value={form.email} onChange={e=>setForm({...form,email:e.target.value})} placeholder="Email *" style={{padding:12,borderRadius:8,border:'1px solid #ddd',fontSize:14}}/>
-                <input value={form.phone} onChange={e=>setForm({...form,phone:e.target.value})} placeholder="Phone *" required style={{padding:12,borderRadius:8,border:'1px solid #166534',fontSize:14,background:'#f0fdf4'}}/>
+                <input value={form.phone} onChange={e=>setForm({...form,phone:e.target.value})} placeholder="Phone *" required type="tel" style={{padding:12,borderRadius:8,border:'1px solid #ddd',fontSize:14}}/>
               </div>
               <select value={form.subject} onChange={e=>setForm({...form,subject:e.target.value})} style={{padding:12,borderRadius:8,border:'1px solid #ddd',fontSize:14}}>
                 <option>Transportation</option>
@@ -205,16 +118,100 @@ export default function App(){
               </select>
               <textarea value={form.message} onChange={e=>setForm({...form,message:e.target.value})} placeholder="Your message *" rows={4} style={{padding:12,borderRadius:8,border:'1px solid #ddd',fontSize:14}}/>
               <button type="submit" style={{background:green,color:'white',padding:12,borderRadius:8,border:'none',fontWeight:800}}>{sent?'✓ Sent!':'Send Message'}</button>
-              {sent && <div style={{background:'#dcfce7',color:green,padding:10,borderRadius:8,fontSize:13,textAlign:'center',fontWeight:700}}>Thank you! We received your message.</div>}
+              {sent && <div style={{background:'#dcfce7',color:green,padding:10,borderRadius:8,fontSize:13,textAlign:'center',fontWeight:700}}>Thank you! We received your message. We will contact you soon at {form.email}</div>}
             </form>
+            <div style={{marginTop:16,background:'#111827',color:'white',borderRadius:10,padding:12,fontSize:13,lineHeight:1.8}}>
+              <b>Direct Contact</b><br/>Email: foodbridge.nigeria@gmail.com<br/>Location: Gwagwalada, Abuja<br/>Founder: Francis Yakubu
+            </div>
           </div>
         </div>
       </div>
     )
   }
 
-  if(page==='blog'){return(<div style={{fontFamily:'Inter,sans-serif',background:'white',minHeight:'100vh'}}><header style={{display:'flex',justifyContent:'space-between',padding:'12px 16px',borderBottom:'1px solid #eee',position:'sticky',top:0,background:'white',zIndex:99}}><div onClick={()=>{setPage('home'); setMenu(true);}} style={{fontWeight:900,color:green,cursor:'pointer',display:'flex',gap:8,alignItems:'center'}}><div style={{width:32,height:32,background:green,color:'white',borderRadius:8,display:'flex',alignItems:'center',justifyContent:'center'}}>F</div>FoodBridge</div><button onClick={()=>{setPage('home'); setMenu(true);}} style={{border:'1px solid #ddd',background:'white',padding:'8px 14px',borderRadius:8}}>← Back</button></header><div style={{padding:'20px 16px',background:'#F5F1E8'}}><p style={{color:green,fontWeight:800,fontSize:11,letterSpacing:1}}>FOODBRIDGE BLOG</p><h1 style={{fontSize:26,fontWeight:900,marginTop:8}}>Connecting Food. Bridging Families</h1><p style={{fontSize:13,color:'#64748b',marginTop:10}}>Sept 30, 2026 • By Francis Yakubu, Founder</p><div style={{marginTop:18,background:'white',borderRadius:14,padding:18,border:'1px solid #e7e0d0',fontSize:14,lineHeight:1.7,color:'#334155'}}><p>Food is more than something we eat. In Nigeria, food represents family, care, culture, community, and connection.</p><div style={{marginTop:20,background:'#111827',color:'white',borderRadius:12,padding:16}}><b>Our Promise</b><p style={{marginTop:8,color:'#cbd5e1'}}>At FoodBridge, we believe that logistics should be about more than transportation. It should be about connection.</p><p style={{marginTop:10,fontWeight:800,color:'#22c55e'}}>FoodBridge: Connecting Food. Bridging Families</p></div></div></div></div>)}
-  if(page==='about'){return(<div style={{fontFamily:'Inter,sans-serif',background:'white',minHeight:'100vh'}}><header style={{display:'flex',justifyContent:'space-between',padding:'12px 16px',borderBottom:'1px solid #eee',position:'sticky',top:0,background:'white'}}><div onClick={()=>{setPage('home'); setMenu(true);}} style={{fontWeight:900,color:green,cursor:'pointer',display:'flex',gap:8,alignItems:'center'}}><div style={{width:32,height:32,background:green,color:'white',borderRadius:8,display:'flex',alignItems:'center',justifyContent:'center'}}>F</div>FoodBridge</div><button onClick={()=>{setPage('home'); setMenu(true);}} style={{border:'1px solid #ddd',background:'white',padding:'8px 14px',borderRadius:8}}>← Back</button></header><div style={{padding:'30px 16px',background:'#F5F1E8'}}><p style={{color:green,fontWeight:800,fontSize:11}}>ABOUT US</p><h1 style={{fontSize:28,fontWeight:900,marginTop:8}}>Connecting Food.<br/>Bridging Families.</h1><div style={{marginTop:20,background:'white',borderRadius:14,padding:18,border:'1px solid #e7e0d0'}}><b>COMPANY DESCRIPTION</b><p style={{fontSize:14,lineHeight:1.6,marginTop:8,color:'#334155'}}>FoodBridge is a Nigerian food logistics and storage company created to make it easier, faster, safer, and more affordable to move and preserve foodstuff.</p></div></div></div>)}
+  if(page==='blog'){
+    return(
+      <div style={{fontFamily:'Inter,sans-serif',background:'white',minHeight:'100vh'}}>
+        <header style={{display:'flex',justifyContent:'space-between',padding:'12px 16px',borderBottom:'1px solid #eee',position:'sticky',top:0,background:'white',zIndex:99}}>
+          <div onClick={()=>{setPage('home'); setMenu(true);}} style={{fontWeight:900,color:green,cursor:'pointer',display:'flex',gap:8,alignItems:'center'}}><div style={{width:32,height:32,background:green,color:'white',borderRadius:8,display:'flex',alignItems:'center',justifyContent:'center'}}>F</div>FoodBridge</div>
+          <button onClick={()=>{setPage('home'); setMenu(true);}} style={{border:'1px solid #ddd',background:'white',padding:'8px 14px',borderRadius:8}}>← Back</button>
+        </header>
+        <div style={{padding:'20px 16px',background:'#F5F1E8'}}>
+          <p style={{color:green,fontWeight:800,fontSize:11,letterSpacing:1}}>FOODBRIDGE BLOG</p>
+          <h1 style={{fontSize:26,fontWeight:900,marginTop:8,lineHeight:1.2}}>Connecting Food. Bridging Families: Building a Smarter Future for Food Logistics in Nigeria</h1>
+          <p style={{fontSize:13,color:'#64748b',marginTop:10}}>Sept 30, 2026 • By Francis Yakubu, Founder</p>
+          <div style={{marginTop:18,background:'white',borderRadius:14,padding:18,border:'1px solid #e7e0d0',fontSize:14,lineHeight:1.7,color:'#334155'}}>
+            <p>Food is more than something we eat. In Nigeria, food represents family, care, culture, community, and connection.</p>
+            <p style={{marginTop:12}}>A mother preparing a carefully packed meal for her child in university. A family sending foodstuff to a loved one living in another state. A restaurant moving supplies from one location to another. A business looking for a safe place to preserve its food products. These everyday situations all have one thing in common: food needs to move from where it is available to where it is needed.</p>
+            <p style={{marginTop:12}}>Yet, moving and storing food in Nigeria can sometimes be challenging. Distance, transportation costs, delays, poor handling, limited storage facilities, and concerns about food preservation can make a simple task unnecessarily stressful.</p>
+            <p style={{marginTop:12}}><b>This is where FoodBridge comes in.</b></p>
+            <h3 style={{marginTop:20,fontWeight:800,color:'#111'}}>Bridging the Gap Between Food and the People Who Need It</h3>
+            <p style={{marginTop:8}}>FoodBridge is a Nigerian food logistics and storage company created with a simple but powerful purpose: to make the movement and preservation of food easier, faster, safer, and more affordable.</p>
+            <h3 style={{marginTop:20,fontWeight:800,color:'#111'}}>When Food Becomes a Message of Love</h3>
+            <p style={{marginTop:8}}>For many Nigerian families, sending food to a loved one is an expression of care.</p>
+            <p style={{marginTop:8}}><b>FoodBridge is designed to make this process simpler.</b></p>
+            <h3 style={{marginTop:20,fontWeight:800,color:'#111'}}>Building Trust, One Delivery at a Time</h3>
+            <p style={{marginTop:8}}>Trust is not created by a slogan. It is built through consistent service.</p>
+            <div style={{marginTop:20,background:'#111827',color:'white',borderRadius:12,padding:16}}>
+              <b>Our Promise</b>
+              <p style={{marginTop:8,color:'#cbd5e1'}}>At FoodBridge, we believe that logistics should be about more than transportation. It should be about connection.</p>
+              <p style={{marginTop:10,fontWeight:800,color:'#22c55e'}}>FoodBridge: Do you Want to Store, Do you Want to Transport or are you Supplying to Foodbridge?</p>
+              <p style={{marginTop:6,fontWeight:800}}>Connecting Food. Bridging Families</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    )
+  }
+
+  if(page==='about'){
+    return(
+      <div style={{fontFamily:'Inter,sans-serif',background:'white',minHeight:'100vh'}}>
+        <header style={{display:'flex',justifyContent:'space-between',padding:'12px 16px',borderBottom:'1px solid #eee',position:'sticky',top:0,background:'white'}}>
+          <div onClick={()=>{setPage('home'); setMenu(true);}} style={{fontWeight:900,color:green,cursor:'pointer',display:'flex',gap:8,alignItems:'center'}}><div style={{width:32,height:32,background:green,color:'white',borderRadius:8,display:'flex',alignItems:'center',justifyContent:'center'}}>F</div>FoodBridge</div>
+          <button onClick={()=>{setPage('home'); setMenu(true);}} style={{border:'1px solid #ddd',background:'white',padding:'8px 14px',borderRadius:8}}>← Back</button>
+        </header>
+        <div style={{padding:'30px 16px',background:'#F5F1E8'}}>
+          <p style={{color:green,fontWeight:800,fontSize:11}}>ABOUT US</p>
+          <h1 style={{fontSize:28,fontWeight:900,marginTop:8}}>Connecting Food.<br/>Bridging Families.</h1>
+          <div style={{marginTop:20,background:'white',borderRadius:14,padding:18,border:'1px solid #e7e0d0'}}>
+            <b>COMPANY DESCRIPTION</b>
+            <p style={{fontSize:14,lineHeight:1.6,marginTop:8,color:'#334155'}}>FoodBridge is a Nigerian food logistics and storage company created to make it easier, faster, safer, and more affordable to move and preserve foodstuff.</p>
+          </div>
+          <div style={{marginTop:14,background:'#111827',color:'white',borderRadius:14,padding:18}}>
+            <b>CORE PURPOSE</b>
+            <p style={{fontSize:14,marginTop:6,color:'#cbd5e1'}}>FoodBridge exists to bridge the gap between where food is available and where it is needed.</p>
+            <div style={{marginTop:16,display:'grid',gridTemplateColumns:'1fr 1fr',gap:10,fontSize:13}}>
+              <div><span style={{color:'#94a3b8'}}>FOUNDER</span><br/><b>Francis Yakubu</b></div>
+              <div><span style={{color:'#94a3b8'}}>LOCATION</span><br/><b>Gwagwalada, Abuja</b></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    )
+  }
+
+  if(page==='login'){
+    const [loginPhone,setLoginPhone]=useState('');
+    const [loginPass,setLoginPass]=useState('');
+    return(
+      <div style={{minHeight:'100vh',background:'#f8fafc',fontFamily:'Inter,sans-serif'}}>
+        <div style={{background:'white',padding:'40px',textAlign:'center'}}><div style={{width:72,height:72,background:green,borderRadius:16,margin:'0 auto',display:'flex',alignItems:'center',justifyContent:'center',color:'white',fontSize:34,fontWeight:900}}>F</div><h1 style={{color:green,marginTop:12}}>FoodBridge</h1></div>
+        <div style={{maxWidth:400,margin:'30px auto',background:'white',padding:24,borderRadius:16,border:'1px solid #eee'}}>
+          <h2 style={{fontWeight:800}}>Welcome back</h2>
+          <p style={{fontSize:12,color:'#64748b',marginTop:4}}>Phone number is required for login</p>
+          <input value={loginPhone} onChange={e=>setLoginPhone(e.target.value)} placeholder="Phone Number *" type="tel" style={{width:'100%',padding:12,borderRadius:8,border:'1px solid #166534',marginTop:15,background:'#f0fdf4',fontSize:14}}/>
+          <input value={loginPass} onChange={e=>setLoginPass(e.target.value)} placeholder="Password *" type="password" style={{width:'100%',padding:12,borderRadius:8,border:'1px solid #ddd',marginTop:10,fontSize:14}}/>
+          <button onClick={()=>{if(!loginPhone || !loginPass){alert('Phone number and password are required'); return;} alert('Login with phone: '+loginPhone)}} style={{width:'100%',background:green,color:'white',padding:12,borderRadius:8,border:'none',marginTop:15,fontWeight:700}}>Sign In</button>
+          <div style={{background:'#F5F1E8',padding:12,borderRadius:8,textAlign:'center',marginTop:12}}>
+            <p style={{fontSize:13}}>Don't have an account?</p>
+            <p style={{fontSize:13,marginTop:4,color:'#334155'}}>Click Get Started on homepage to create account with phone number</p>
+          </div>
+          <p onClick={()=>{setPage('home'); setMenu(true);}} style={{textAlign:'center',marginTop:15,cursor:'pointer',fontSize:13}}>Back</p>
+        </div>
+      </div>
+    )
+  }
 
   return(
     <div style={{fontFamily:'Inter,sans-serif',background:'white',color:'#111'}}>
@@ -233,10 +230,10 @@ export default function App(){
           {sol && <div style={{padding:'0 0 12px 0',display:'grid',gap:8}}>
             <div onClick={()=>{setMenu(false);setPage('solutions')}} style={{background:'#F5F1E8',borderRadius:10,padding:12,cursor:'pointer'}}><b style={{fontSize:13,color:green}}>👨‍👩‍👧‍👦 Personal & Family Delivery</b></div>
             <div onClick={()=>{setMenu(false);setPage('solutions')}} style={{background:'#F5F1E8',borderRadius:10,padding:12,cursor:'pointer'}}><b style={{fontSize:13,color:green}}>🎓 Student Food Support</b></div>
-            <div onClick={()=>{setMenu(false);setPage('solutions')}} style={{background:'#F5F1E8',borderRadius:10,padding:12,cursor:'pointer'}}><b style={{fontSize:13,color:green}}>🏢 Business Logistics</b></div>
+            <div onClick={()=>{setMenu(false);setPage('solutions')}} style={{background:'#F5F1E8',borderRadius:10,padding:12,cursor:'pointer'}}><b style={{fontSize:13,color:green}}>🏢 Business & Organization Logistics</b></div>
             <div onClick={()=>{setMenu(false);setPage('solutions')}} style={{background:'#F5F1E8',borderRadius:10,padding:12,cursor:'pointer'}}><b style={{fontSize:13,color:green}}>📦 Secure Food Storage</b></div>
             <div onClick={()=>{setMenu(false);setPage('solutions')}} style={{background:'#F5F1E8',borderRadius:10,padding:12,cursor:'pointer'}}><b style={{fontSize:13,color:green}}>🛒 Buy & Sell Marketplace</b></div>
-            <div onClick={()=>{setMenu(false);setPage('solutions')}} style={{background:'#F5F1E8',borderRadius:10,padding:12,cursor:'pointer'}}><b style={{fontSize:13,color:green}}>🚚 Bulk Transport</b></div>
+            <div onClick={()=>{setMenu(false);setPage('solutions')}} style={{background:'#F5F1E8',borderRadius:10,padding:12,cursor:'pointer'}}><b style={{fontSize:13,color:green}}>🚚 Bulk & Inter-State Transport</b></div>
           </div>}
           <div onClick={()=>{setMenu(false);setPage('about')}} style={{padding:'18px 0',borderBottom:'1px solid #f1f5f9',cursor:'pointer',fontWeight:600}}>About</div>
           <div onClick={()=>{setMenu(false);setPage('blog')}} style={{padding:'18px 0',borderBottom:'1px solid #f1f5f9',cursor:'pointer',fontWeight:600}}>Blog</div>
@@ -247,8 +244,8 @@ export default function App(){
       <section style={{textAlign:'center',padding:'50px 16px 30px'}}>
         <h1 style={{fontSize:36,fontWeight:900,lineHeight:1.05}}>ONE PLATFORM<br/><span style={{color:green}}>TOTAL FOOD CONTROL</span></h1>
         <p style={{color:'#475569',fontSize:15,maxWidth:520,margin:'18px auto'}}>FoodBridge connects food donors, inventory, analytics and community into one powerful system.</p>
-        <button onClick={()=>setPage('register')} style={{background:'#111827',color:'white',padding:'13px 26px',borderRadius:10,border:'none',fontWeight:700,cursor:'pointer'}}>Get Started</button>
-        <p style={{fontSize:12,color:'#64748b',marginTop:8}}>No account? You will be asked to create one with phone number</p>
+        <button onClick={()=>setPage('login')} style={{background:'#111827',color:'white',padding:'13px 26px',borderRadius:10,border:'none',fontWeight:700,cursor:'pointer'}}>Get Started</button>
+        <p style={{fontSize:11,color:'#64748b',marginTop:8}}>No account? You will create one with phone number</p>
         <div style={{margin:'30px auto 0',maxWidth:640,borderRadius:18,overflow:'hidden',border:'1px solid #e2e8f0'}}>
           <img src="https://images.unsplash.com/photo-1593113598332-cd288d649433?w=900" style={{width:'100%'}} alt="food"/>
         </div>
@@ -266,12 +263,26 @@ export default function App(){
       <section id="contact" style={{padding:'35px 16px'}}>
         <h2 style={{fontWeight:800,textAlign:'center'}}>Contact Us</h2>
         <div style={{marginTop:18,background:'#F5F1E8',padding:14,borderRadius:10,fontSize:13,lineHeight:1.8}}>
-          Email: foodbridge.nigeria@gmail.com<br/>Phone: 0816-383-1822<br/>Location: Gwagwalada, Abuja
+          Email: foodbridge.nigeria@gmail.com<br/>Location: Gwagwalada, Abuja
         </div>
       </section>
 
       <footer style={{background:'white',padding:'25px 16px',borderTop:'1px solid #eee'}}>
-        <p style={{fontSize:11,color:'#64748b'}}>© 2026 FoodBridge. Gwagwalada, Abuja. Founder Francis Yakubu.</p>
+        <div style={{display:'flex',flexDirection:'column',gap:12}}>
+          <a href="https://www.tiktok.com/@foodbridge.ng.lim?_r=1&_t=ZS-9A5NZ6zEsQG" target="_blank" rel="noopener noreferrer" style={{display:'flex',alignItems:'center',gap:10,textDecoration:'none'}}>
+            <div style={{width:36,height:36,background:'black',borderRadius:8,display:'flex',alignItems:'center',justifyContent:'center'}}><span style={{color:'white',fontWeight:900,fontSize:20}}>♪</span></div>
+            <span style={{color:'black',fontWeight:700,fontSize:18}}>TikTok</span>
+          </a>
+          <a href="https://www.facebook.com/profile.php?id=61594798832703&mibextid=rS40aB7S9Ucbxw6v" target="_blank" rel="noopener noreferrer" style={{display:'flex',alignItems:'center',gap:10,textDecoration:'none'}}>
+            <div style={{width:36,height:36,background:'#1877F2',borderRadius:8,display:'flex',alignItems:'center',justifyContent:'center',color:'white',fontWeight:900,fontSize:22}}>f</div>
+            <span style={{color:'#1877F2',fontWeight:700,fontSize:18}}>facebook</span>
+          </a>
+          <a href="https://www.youtube.com/@foodbridgeNigeria" target="_blank" rel="noopener noreferrer" style={{display:'flex',alignItems:'center',gap:10,textDecoration:'none'}}>
+            <div style={{width:36,height:36,background:'#FF0000',borderRadius:8,display:'flex',alignItems:'center',justifyContent:'center'}}><div style={{width:0,height:0,borderLeft:'10px solid white',borderTop:'6px solid transparent',borderBottom:'6px solid transparent',marginLeft:2}}></div></div>
+            <span style={{color:'black',fontWeight:700,fontSize:18}}>YouTube</span>
+          </a>
+        </div>
+        <p style={{marginTop:20,fontSize:11,color:'#64748b'}}>© 2026 FoodBridge. Gwagwalada, Abuja. Founder Francis Yakubu.</p>
       </footer>
     </div>
   )
